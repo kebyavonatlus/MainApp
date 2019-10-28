@@ -5,6 +5,7 @@ using System.Web.Security;
 using MainApp.Models;
 using System.Data.Entity;
 using System.Text;
+using MainApp.Models.UserModel;
 
 namespace MainApp.Providers
 {

@@ -1,0 +1,51 @@
+CREATE TABLE Users
+(
+	UserId INT PRIMARY KEY IDENTITY(1,1),
+	Login NVARCHAR(50) NOT NULL UNIQUE,
+	Email NVARCHAR(300) NOT NULL,
+	Password NVARCHAR(50) NOT NULL,
+	FullName NVARCHAR(200) NOT NULL,
+	IdentificationNumber NVARCHAR(14) NULL,
+	BirthDate DATE NULL,
+	Address NVARCHAR(300) NULL,
+	IsCustomer BIT 
+)
+
+
+CREATE TABLE Roles 
+(
+	RoleId INT PRIMARY KEY IDENTITY(1,1),
+	RoleName NVARCHAR(300) NOT NULL
+)
+
+
+CREATE TABLE UserRoles
+(
+	UserId INT NOT NULL,
+	RoleId INT NOT NULL,
+	PRIMARY KEY(UserId,RoleId),
+	FOREIGN KEY (RoleId) REFERENCES dbo.Roles(RoleId),
+	FOREIGN KEY (UserId) REFERENCES dbo.Users(UserId)
+)
+
+
+
+CREATE TABLE Accounts
+(
+	AccountId INT IDENTITY(1,1) PRIMARY KEY,
+	AccountNumber NVARCHAR(14) UNIQUE NOT NULL,
+	AccountName NVARCHAR(MAX) NOT NULL,
+	AccountOpenDate DATE NOT NULL,
+	AccountCloseDate DATE NULL,
+	Balance NUMERIC(15,2) NOT NULL,
+	Currency NVARCHAR(MAX) NOT NULL,
+	UserId INT FOREIGN KEY REFERENCES dbo.Users(UserId)
+)
+
+
+
+
+SELECT * FROM dbo.Users
+SELECT * FROM dbo.UserRoles
+SELECT * FROM dbo.Roles
+SELECT * FROM dbo.Accounts

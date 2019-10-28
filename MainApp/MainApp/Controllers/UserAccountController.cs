@@ -7,10 +7,12 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using MainApp.Models;
+using MainApp.Models.UserModel;
+using MainApp.ViewModels;
 
 namespace MainApp.Controllers
 {
-    public class AccountController : Controller
+    public class UserAccountController : Controller
     {
         /// <summary>
         /// Авторищация пользователя на сайт
@@ -70,7 +72,7 @@ namespace MainApp.Controllers
                 {
                     using (ConnectionContext db = new ConnectionContext())
                     {
-                        db.Users.Add(new User { Login = model.Login, Email = model.Email, Password = hashPassword, FirstName = model.FirstName, SureName = model.SureName });
+                        db.Users.Add(new User { Login = model.Login, Email = model.Email, Password = hashPassword, FullName = model.FullName, IsCustomer = true});
                         try
                         {
                             db.SaveChanges();

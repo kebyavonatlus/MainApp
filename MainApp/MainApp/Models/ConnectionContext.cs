@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using MainApp.Models.UserModel;
 
 namespace MainApp.Models
 {

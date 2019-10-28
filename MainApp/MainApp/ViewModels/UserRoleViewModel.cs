@@ -1,4 +1,4 @@
-﻿namespace MainApp.Models
+﻿namespace MainApp.ViewModels
 {
     public class UserRoleViewModel
     {
