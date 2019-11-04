@@ -1,15 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using MainApp.Emums;
 
 namespace MainApp.Models.AccountModel
 {
     public class Account
     {
         [Key]
-        public int AccountId { get; set; }
-        [Required]
         [Display(Name = "Номер счета")]
-        public string AccountNumber { get; set; }
+        public int AccountNumber { get; set; }
 
         [Required]
         [Display(Name = "Наименование")]
@@ -25,9 +24,8 @@ namespace MainApp.Models.AccountModel
         [Display(Name = "Баланс")]
         public decimal Balance { get; set; }
 
-        [Required]
         [Display(Name = "Валюта")]
-        public string Currency { get; set; }
+        public CurrencyId Currency { get; set; }
 
         [Required]
         public int UserId { get; set; }

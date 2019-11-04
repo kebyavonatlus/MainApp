@@ -6,7 +6,9 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using MainApp.Emums;
 using MainApp.Models;
+using MainApp.Models.AccountModel;
 using MainApp.Models.UserModel;
 using MainApp.ViewModels;
 
@@ -72,16 +74,36 @@ namespace MainApp.Controllers
                 {
                     using (ConnectionContext db = new ConnectionContext())
                     {
-                        db.Users.Add(new User { Login = model.Login, Email = model.Email, Password = hashPassword, FullName = model.FullName, IsCustomer = true});
-                        try
+                        using (var transaction = db.Database.BeginTransaction())
                         {
-                            db.SaveChanges();
+                            db.Users.Add(new User { Login = model.Login, Email = model.Email, Password = hashPassword, FullName = model.FullName, IsCustomer = true});
+                            try
+                            {
+                                db.SaveChanges();
+                            }
+                            catch (Exception ex)
+                            {
+                                return Json(new { StatusCode = 204, message = "Что-то пошло не так!" });
+                            }
+                            user = db.Users.FirstOrDefault(u => u.Login == model.Login && u.Password == hashPassword);
+                            db.Accounts.Add(new Account
+                            {
+                                AccountName = user.FullName,
+                                AccountOpenDate = DateTime.Now,
+                                UserId = user.UserId,
+                                Currency = CurrencyId.KGS
+                            });
+                            try
+                            {
+                                db.SaveChanges();
+                            }
+                            catch (Exception e)
+                            {
+                                return Json(new { StatusCode = 204, message = "Что-то пошло не так!" });
+                            }
+                            transaction.Commit();
                         }
-                        catch (Exception ex)
-                        {
-                            return Json(new { StatusCode = 204, message = "Что-то пошло не так!" });
-                        }
-                        user = db.Users.FirstOrDefault(u => u.Login == model.Login && u.Password == hashPassword);
+
                     }
                     if (user != null)
                     {

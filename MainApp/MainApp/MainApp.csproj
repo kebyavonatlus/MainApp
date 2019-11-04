@@ -138,12 +138,13 @@
     <Compile Include="Controllers\UserAccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserRoleController.cs" />
+    <Compile Include="Emums\CurrencyId.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModel\Account.cs" />
     <Compile Include="Models\ConnectionContext.cs" />
-    <Compile Include="Models\Histories\Histories.cs" />
+    <Compile Include="Models\Histories\History.cs" />
     <Compile Include="Models\PaymentModel\Payment.cs" />
     <Compile Include="Models\TransferModel\Transfer.cs" />
     <Compile Include="Models\UserModel\Role.cs" />

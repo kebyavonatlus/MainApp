@@ -9,7 +9,7 @@ namespace MainApp.Controllers
     public class AccountController : Controller
     {
         // GET: Account
-        public ActionResult CreateAccount()
+        public ActionResult CreateAccount(int? userId)
         {
             return View();
         }
