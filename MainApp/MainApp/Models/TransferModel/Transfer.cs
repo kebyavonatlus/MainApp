@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace MainApp.Models.TransferModel
 {
@@ -30,7 +31,11 @@ namespace MainApp.Models.TransferModel
         [Required(ErrorMessage = "Обзательное поле для заполенения \"Сумма\"")]
         [Display(Name = "Сумма")]
         public decimal TransferSum { get; set; }
-        
+
+        [Required(ErrorMessage = "Обзательное поле для заполенения \"Дата перевода\"")]
+        [Display(Name = "Дата перевода")]
+        public DateTime TransferDate { get; set; }
+
         [Required(ErrorMessage = "Обзательное поле для заполенения \"Комиссия\"")]
         [Display(Name = "Комиссия")]
         public decimal Comission { get; set; }

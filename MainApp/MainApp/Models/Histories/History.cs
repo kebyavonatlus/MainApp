@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace MainApp.Models.Histories
 {
@@ -21,6 +22,10 @@ namespace MainApp.Models.Histories
         [Required(ErrorMessage = "Введите комментарий")]
         [Display(Name = "Комментарий")]
         public string Comment { get; set; }
+
+        [Required(ErrorMessage = "Введите дату операций")]
+        [Display(Name = "Дата операции")]
+        public DateTime OperationDate { get; set; }
 
         [Required]
         [Display(Name = "Id пользователя")]

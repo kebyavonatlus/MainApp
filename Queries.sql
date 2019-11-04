@@ -57,6 +57,7 @@ CREATE TABLE dbo.Histories
 	CtAccount INT NOT NULL,
 	[Sum] NUMERIC(15,2) NOT NULL,
 	Comment NVARCHAR(300) NOT NULL,
+	OperationDate DATETIME NOT NULL,
 	UserId INT FOREIGN KEY REFERENCES dbo.Users(UserId) NOT NULL
 )
 
@@ -69,8 +70,11 @@ CREATE TABLE dbo.Transfers
 	ReceiverUserId INT FOREIGN KEY REFERENCES dbo.Users (UserId) NOT NULL,
 	Comment NVARCHAR(300) NOT NULL,
 	TransferSum NUMERIC(15,2) NOT NULL,
+	TransferDate DATETIME NOT NULL,
 	Comission NUMERIC(15,2) NULL
 )
+
+
 
 CREATE TABLE dbo.TransferHistories
 (

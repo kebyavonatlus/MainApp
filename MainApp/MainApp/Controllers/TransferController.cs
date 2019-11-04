@@ -46,6 +46,7 @@ namespace MainApp.Controllers
                     SenderUserId = accountFrom.UserId,
                     ReceiverUserId = accountTo.UserId,
                     Comment = accountFrom.AccountName + " выполнил перевод на счет " + accountTo.AccountName,
+                    TransferDate = DateTime.Now,
                     TransferSum = TransferSum,
                     Comission = 1
                 };
@@ -57,6 +58,7 @@ namespace MainApp.Controllers
                     DtAccount = accountTo.AccountNumber,
                     Comment = "Перевод",
                     Sum = TransferSum,
+                    OperationDate = DateTime.Now,
                     UserId = accountFrom.UserId
                 };
 
