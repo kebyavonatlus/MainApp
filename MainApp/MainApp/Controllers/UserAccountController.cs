@@ -81,7 +81,7 @@ namespace MainApp.Controllers
                             {
                                 db.SaveChanges();
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                                 return Json(new { StatusCode = 204, message = "Что-то пошло не так!" });
                             }
@@ -97,13 +97,12 @@ namespace MainApp.Controllers
                             {
                                 db.SaveChanges();
                             }
-                            catch (Exception e)
+                            catch (Exception)
                             {
                                 return Json(new { StatusCode = 204, message = "Что-то пошло не так!" });
                             }
                             transaction.Commit();
                         }
-
                     }
                     if (user != null)
                     {

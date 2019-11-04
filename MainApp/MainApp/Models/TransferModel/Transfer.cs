@@ -9,11 +9,11 @@ namespace MainApp.Models.TransferModel
         
         [Required(ErrorMessage = "Обзательное поле для заполенения \"Со счета\"")]
         [Display(Name = "Со счета")]
-        public string AccountFrom { get; set; }
+        public int AccountFrom { get; set; }
 
         [Required(ErrorMessage = "Обзательное поле для заполенения \"На счет\"")]
         [Display(Name = "На счет")]
-        public string AccountTo { get; set; }
+        public int AccountTo { get; set; }
         
         [Required(ErrorMessage = "Обзательное поле для заполенения \"UserId отправителя\"")]
         [Display(Name = "UserId отправителя")]

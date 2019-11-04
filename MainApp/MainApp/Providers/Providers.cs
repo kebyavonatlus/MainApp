@@ -36,7 +36,7 @@ namespace MainApp.Providers
                 {
                     db.SaveChanges();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     throw;
                 }

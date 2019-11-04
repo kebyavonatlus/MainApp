@@ -41,5 +41,11 @@ namespace MainApp.Models
         /// История переводов
         /// </summary>
         public DbSet<Transfer> Transfers { get; set; }
+
+        /// <summary>
+        /// Промежуточная таблица между историей и переводом
+        /// </summary>
+        public DbSet<TransferHistory> TransferHistories { get; set; }
+
     }
 }
