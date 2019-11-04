@@ -1,3 +1,12 @@
+USE MASTER
+GO
+
+CREATE DATABASE Test12
+GO
+
+USE Test12
+GO
+
 CREATE TABLE Users
 (
 	UserId INT PRIMARY KEY IDENTITY(1,1),
@@ -32,20 +41,41 @@ CREATE TABLE UserRoles
 
 CREATE TABLE Accounts
 (
-	AccountId INT IDENTITY(1,1) PRIMARY KEY,
-	AccountNumber NVARCHAR(14) UNIQUE NOT NULL,
-	AccountName NVARCHAR(MAX) NOT NULL,
-	AccountOpenDate DATE NOT NULL,
-	AccountCloseDate DATE NULL,
+	AccountNumber INT PRIMARY KEY IDENTITY(1,1),
+	AccountName NVARCHAR(300) NOT NULL,
+	AccountOpenDate DATETIME NOT NULL,
+	AccountCloseDate DATETIME NULL,
 	Balance NUMERIC(15,2) NOT NULL,
-	Currency NVARCHAR(MAX) NOT NULL,
-	UserId INT FOREIGN KEY REFERENCES dbo.Users(UserId)
+	Currency CHAR(5) NOT NULL,
+	UserId INT FOREIGN KEY REFERENCES dbo.Users(UserId) NOT NULL
 )
 
+CREATE TABLE dbo.Histories
+(
+	HistoryId INT PRIMARY KEY IDENTITY(1,1),
+	DtAccount INT NOT NULL,
+	CtAccount INT NOT NULL,
+	[Sum] NUMERIC(15,2) NOT NULL,
+	Comment NVARCHAR(300) NOT NULL,
+	UserId INT FOREIGN KEY REFERENCES dbo.Users(UserId) NOT NULL
+)
 
+CREATE TABLE dbo.Transfers
+(
+	TransferId INT PRIMARY KEY IDENTITY(1,1),
+	AccountFrom INT NOT NULL,
+	AccountTo INT NOT NULL,
+	SenderUserId INT FOREIGN KEY REFERENCES dbo.Users(UserId) NOT NULL,
+	ReceiverUserId INT FOREIGN KEY REFERENCES dbo.Users (UserId) NOT NULL,
+	Comment NVARCHAR(300) NOT NULL,
+	TransferSum NUMERIC(15,2) NOT NULL,
+	Comission NUMERIC(15,2) NULL
+)
 
+CREATE TABLE dbo.TransferHistories
+(
+	TransferId INT FOREIGN KEY REFERENCES dbo.Transfers(TransferId) NOT NULL,
+	HistoryId INT FOREIGN KEY REFERENCES dbo.Histories(HistoryId) NOT NULL
+	PRIMARY KEY(TransferId, HistoryId)
+)
 
-SELECT * FROM dbo.Users
-SELECT * FROM dbo.UserRoles
-SELECT * FROM dbo.Roles
-SELECT * FROM dbo.Accounts
