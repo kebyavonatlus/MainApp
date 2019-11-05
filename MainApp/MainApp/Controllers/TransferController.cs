@@ -83,19 +83,23 @@ namespace MainApp.Controllers
         /// <param name="transferId">int</param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult ConfirmTransfer(int? transferId)
+        public ActionResult ConfirmTransfer(int? transferId, int? userId)
         {
             using (var db = new ConnectionContext())
             {
                 var Transfer = db.Transfers.FirstOrDefault(t => t.TransferId == transferId);
+                var User = db.Users.FirstOrDefault(u => u.UserId == userId);
 
                 if (Transfer == null) return Json(new {StatusCode = 404, Message = "Перевод не найден"});
+                if (User == null) return Json(new { StatusCode = 404, Message = "Пользователь не найден" });
+
+                if (Transfer.ReceiverUserId != User.UserId) return Json(new { StatusCode = 403, Message = "Невозможно принять перевод. Не соотвествует пользователь" });
 
                 var accountFrom = db.Accounts.FirstOrDefault(a => a.AccountNumber == Transfer.AccountFrom);
                 var accountTo = db.Accounts.FirstOrDefault(a => a.AccountNumber == Transfer.AccountTo);
 
-                if (accountFrom == null) return Json(new { StatusCode = 404, Message = "Счет не найден" });
-                if (accountTo == null) return Json(new { StatusCode = 404, Message = "Счет не найден" });
+                if (accountFrom == null) return Json(new { StatusCode = 404, Message = "Счет отправителя не найден" });
+                if (accountTo == null) return Json(new { StatusCode = 404, Message = "Счет получателя не найден" });
 
 
                 // Формирование истории
@@ -119,7 +123,7 @@ namespace MainApp.Controllers
                     }
                     catch (Exception)
                     {
-                        return Json(new { StatusCode = 204, message = "При подтверждении перевода, произошла ошибка. Попробуйте позже." });
+                        return Json(new { StatusCode = 204, message = "При подтверждении перевода произошла ошибка. Попробуйте позже." });
                     }
 
                     // Добавление данных в промежуточную таблицу
@@ -141,7 +145,7 @@ namespace MainApp.Controllers
                     }
                     catch (Exception)
                     {
-                        return Json(new { StatusCode = 204, message = "При подтверждении перевода, произошла ошибка. Попробуйте позже." });
+                        return Json(new { StatusCode = 204, message = "При подтверждении перевода произошла ошибка. Попробуйте позже." });
                     }
                     transactions.Commit();
                 }
