@@ -134,7 +134,7 @@ namespace MainApp.Controllers
                     transactions.Commit();
                 }
 
-                return Json(new {StatusCode = 200, Message = "Перевод успешно принят"});
+                return Json(new {StatusCode = 202, Message = "Перевод успешно принят"});
             }
         }
 
@@ -147,40 +147,19 @@ namespace MainApp.Controllers
 
                 if (TransferId == null) return Json(new { StatusCode = 404, Message = "Перевод не найден" });
 
-                var TransferHistory = db.TransferHistories.First(x => x.TransferId == transferId);
-                var HistoryId = db.Histories.First(x => x.HistoryId == TransferHistory.TransferId);
+                if (TransferId.TransferStatus != TransferStatus.Created) return Json(new { StatusCode = 203, Message = "Невозможно отменить перевод. Перевод уже подтвержден." });
 
-                var accountFrom = db.Accounts.Find(TransferId.AccountFrom);
-                var accountTo = db.Accounts.Find(TransferId.AccountTo);
-                var transferSum = TransferId.TransferSum;
+                db.Transfers.Remove(TransferId);
 
-                using (var transaction = db.Database.BeginTransaction())
+                try
                 {
-                    accountFrom.Balance += transferSum;
-                    accountTo.Balance -= transferSum;
-                    db.TransferHistories.Remove(TransferHistory);
-                    try
-                    {
-                        db.SaveChanges();
-                    }
-                    catch (Exception)
-                    {
-                        return Json(new { StatusCode = 400, Message = "Не удалось отменить перевод" });
-                    }
-
-                    db.Histories.Remove(HistoryId);
-                    db.Transfers.Remove(TransferId);
-
-                    try
-                    {
-                        db.SaveChanges();
-                    }
-                    catch (Exception)
-                    {
-                        return Json(new { StatusCode = 400, Message = "Не удалось отменить перевод" });
-                    }
-                    transaction.Commit();
+                    db.SaveChanges();
                 }
+                catch (Exception)
+                {
+                    return Json(new { StatusCode = 204, message = "Невозможно отменить перевод. Произошла непредвиденная ошибка" });
+                }
+
             }
             return Json(new { StatusCode = 200, Message = "Перевод успешно отеменен" });
         }
