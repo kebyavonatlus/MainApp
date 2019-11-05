@@ -24,14 +24,15 @@ namespace MainApp.Controllers
         [HttpPost]
         public ActionResult Transfer(int? AccountFrom, int? AccountTo, decimal TransferSum)
         {
-            if (AccountFrom == null) return Json(new { StatusCode = 404, Message = "Счет отправителя не найден" });
-            if (AccountTo == null) return Json(new { StatusCode = 404, Message = "Счет получателя не найден" });
-            if (TransferSum <= 0) return Json(new { StatusCode = 405, Message = "Сумма не может быть меньше или равна нулю" });
 
             using (var db = new ConnectionContext())
             {
-                var accountFrom = db.Accounts.Find(AccountFrom);
-                var accountTo = db.Accounts.Find(AccountTo);
+                var accountFrom = db.Accounts.FirstOrDefault(a => a.AccountNumber == AccountFrom);
+                var accountTo = db.Accounts.FirstOrDefault(a => a.AccountNumber == AccountTo);
+
+                if (TransferSum <= 0) return Json(new { StatusCode = 405, Message = "Сумма не может быть меньше или равна нулю" });
+                if (AccountFrom == null) return Json(new { StatusCode = 404, Message = "Счет отправителя не найден" });
+                if (AccountTo == null) return Json(new { StatusCode = 404, Message = "Счет получателя не найден" });
 
                 if (accountFrom.Balance < TransferSum)
                 {
@@ -82,7 +83,14 @@ namespace MainApp.Controllers
 
                     accountFrom.Balance -= TransferSum;
                     accountTo.Balance += TransferSum;
-                    db.SaveChanges();
+                    try
+                    {
+                        db.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+                        return Json(new { StatusCode = 204, message = "Что-то пошло не так!" });
+                    }
                     transactions.Commit();
                 }
             }
@@ -133,7 +141,6 @@ namespace MainApp.Controllers
                     transaction.Commit();
                 }
             }
-
             return Json(new { StatusCode = 200, Message = "Перевод успешно отеменен" });
         }
     }

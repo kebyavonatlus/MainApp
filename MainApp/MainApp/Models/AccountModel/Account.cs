@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using MainApp.Emums;
+using MainApp.Enums;
 
 namespace MainApp.Models.AccountModel
 {

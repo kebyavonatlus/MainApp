@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
-using MainApp.Emums;
+using MainApp.Enums;
 using MainApp.Models;
 using MainApp.Models.AccountModel;
 
@@ -20,7 +20,7 @@ namespace MainApp.Controllers
                 db.Accounts.Add(new Account
                 {
                     AccountName = user.FullName,
-                    Currency = (CurrencyId) currency,
+                    Currency = (CurrencyId)currency,
                     AccountOpenDate = DateTime.Now,
                     UserId = user.UserId
                 });

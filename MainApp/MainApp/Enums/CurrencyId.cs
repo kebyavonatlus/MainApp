@@ -1,4 +1,4 @@
-﻿namespace MainApp.Emums
+﻿namespace MainApp.Enums
 {
     public enum CurrencyId
     {

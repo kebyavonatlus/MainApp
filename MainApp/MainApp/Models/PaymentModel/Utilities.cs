@@ -1,6 +1,6 @@
 ﻿namespace MainApp.Models.PaymentModel
 {
-    public class Payment
+    public abstract class Utilities 
     {
         
     }

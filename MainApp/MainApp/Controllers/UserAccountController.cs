@@ -6,7 +6,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using MainApp.Emums;
+using MainApp.Enums;
 using MainApp.Models;
 using MainApp.Models.AccountModel;
 using MainApp.Models.UserModel;
