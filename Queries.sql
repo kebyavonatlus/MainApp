@@ -20,13 +20,11 @@ CREATE TABLE Users
 	IsCustomer BIT 
 )
 
-
 CREATE TABLE Roles 
 (
 	RoleId INT PRIMARY KEY IDENTITY(1,1),
 	RoleName NVARCHAR(300) NOT NULL
 )
-
 
 CREATE TABLE UserRoles
 (
@@ -36,8 +34,6 @@ CREATE TABLE UserRoles
 	FOREIGN KEY (RoleId) REFERENCES dbo.Roles(RoleId),
 	FOREIGN KEY (UserId) REFERENCES dbo.Users(UserId)
 )
-
-
 
 CREATE TABLE Accounts
 (
@@ -74,8 +70,6 @@ CREATE TABLE dbo.Transfers
 	Comission NUMERIC(15,2) NULL
 )
 
-
-
 CREATE TABLE dbo.TransferHistories
 (
 	TransferId INT FOREIGN KEY REFERENCES dbo.Transfers(TransferId) NOT NULL,
@@ -83,3 +77,38 @@ CREATE TABLE dbo.TransferHistories
 	PRIMARY KEY(TransferId, HistoryId)
 )
 
+
+CREATE TABLE dbo.UtilityCategories
+(
+	UtilityCategoryId INT PRIMARY KEY IDENTITY(1,1),
+	UtilityCategoryName NVARCHAR(300) NOT NULL,
+	UtilityCategoryDescription NVARCHAR(300) NOT NULL
+)
+
+CREATE TABLE dbo.Utilities
+(
+	UtilityId INT PRIMARY KEY IDENTITY(1,1),
+	UtilityName NVARCHAR(300) NOT NULL,
+	UtilityDescription NVARCHAR(300) NULL,
+	UtilityCategoryId INT FOREIGN KEY REFERENCES UtilityCategories(UtilityCategoryId) NOT NULL,
+	UtilityAccountNumber INT FOREIGN KEY REFERENCES dbo.Accounts(AccountNumber) NOT NULL
+)	
+
+
+CREATE TABLE dbo.Payments
+(
+	PaymentId INT PRIMARY KEY IDENTITY(1,1),
+	UtilityId INT FOREIGN KEY REFERENCES dbo.Utilities(UtilityId) NOT NULL,
+	PaymentComission NUMERIC(15,2) NULL,
+	PaymentSum NUMERIC(15,2) NOT NULL,
+	PaymentComment NVARCHAR(200) NOT NULL,
+	PaymentDate DATETIME NOT NULL,
+	UserId INT FOREIGN KEY REFERENCES dbo.Users(UserId) NOT NULL
+)
+
+CREATE TABLE dbo.PaymentHistories
+(
+	PaymentId INT FOREIGN KEY REFERENCES dbo.Payments(PaymentId) NOT NULL,
+	HistoryId INT FOREIGN KEY REFERENCES dbo.Histories(HistoryId) NOT NULL
+	PRIMARY KEY(PaymentId, HistoryId)
+)

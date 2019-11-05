@@ -32,7 +32,6 @@ namespace MainApp.Controllers
         [HttpPost]
         public ActionResult Transfer(int? AccountFrom, int? AccountTo, decimal TransferSum)
         {
-
             using (var db = new ConnectionContext())
             {
                 var accountFrom = db.Accounts.FirstOrDefault(a => a.AccountNumber == AccountFrom);

@@ -147,7 +147,10 @@
     <Compile Include="Models\AccountModel\Account.cs" />
     <Compile Include="Models\ConnectionContext.cs" />
     <Compile Include="Models\Histories\History.cs" />
-    <Compile Include="Models\PaymentModel\Utilities.cs" />
+    <Compile Include="Models\PaymentModel\Payment.cs" />
+    <Compile Include="Models\PaymentModel\PaymentHistory.cs" />
+    <Compile Include="Models\PaymentModel\UtilityCategory.cs" />
+    <Compile Include="Models\PaymentModel\Utility.cs" />
     <Compile Include="Models\TransferModel\Transfer.cs" />
     <Compile Include="Models\TransferModel\TransferHistory.cs" />
     <Compile Include="Models\UserModel\Role.cs" />
