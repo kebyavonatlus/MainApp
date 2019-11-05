@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using MainApp.Enums;
 
 namespace MainApp.Models.TransferModel
 {
@@ -39,5 +40,9 @@ namespace MainApp.Models.TransferModel
         [Required(ErrorMessage = "Обзательное поле для заполенения \"Комиссия\"")]
         [Display(Name = "Комиссия")]
         public decimal Comission { get; set; }
+
+        [Required(ErrorMessage = "Обзательное поле для заполенения \"Статус\"")]
+        [Display(Name = "Статус")]
+        public TransferStatus TransferStatus { get; set; }
     }
 }

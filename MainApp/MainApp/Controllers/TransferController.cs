@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MainApp.Enums;
 using MainApp.Models;
 using MainApp.Models.Histories;
 using MainApp.Models.TransferModel;
@@ -49,8 +50,41 @@ namespace MainApp.Controllers
                     Comment = accountFrom.AccountName + " выполнил перевод на счет " + accountTo.AccountName,
                     TransferDate = DateTime.Now,
                     TransferSum = TransferSum,
-                    Comission = 1
+                    Comission = 1,
+                    TransferStatus = TransferStatus.Created
                 };
+                
+                // Добавление перевода в таблицу
+                db.Transfers.Add(transfer);
+
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    return Json(new { StatusCode = 204, message = "Что-то пошло не так!" });
+                }
+
+            }
+            return Json(new { StatusCode = 200, Message = "Перевод успешно создан" });
+        }
+
+        [HttpPost]
+        public ActionResult ConfirmTransfer(int? transferId)
+        {
+            using (var db = new ConnectionContext())
+            {
+                var Transfer = db.Transfers.FirstOrDefault(t => t.TransferId == transferId);
+
+                if (Transfer == null) return Json(new {StatusCode = 404, Message = "Перевод не найден"});
+
+                var accountFrom = db.Accounts.FirstOrDefault(a => a.AccountNumber == Transfer.AccountFrom);
+                var accountTo = db.Accounts.FirstOrDefault(a => a.AccountNumber == Transfer.AccountTo);
+
+                if (accountFrom == null) return Json(new { StatusCode = 404, Message = "Счет не найден" });
+                if (accountTo == null) return Json(new { StatusCode = 404, Message = "Счет не найден" });
+
 
                 // Формирование истории
                 var history = new History
@@ -58,43 +92,50 @@ namespace MainApp.Controllers
                     CtAccount = accountFrom.AccountNumber,
                     DtAccount = accountTo.AccountNumber,
                     Comment = "Перевод",
-                    Sum = TransferSum,
+                    Sum = Transfer.TransferSum,
                     OperationDate = DateTime.Now,
                     UserId = accountFrom.UserId
                 };
 
                 using (var transactions = db.Database.BeginTransaction())
                 {
-                    // Добавление перевода в таблицу
-                    db.Transfers.Add(transfer);
-
-                    // Добавление истории в таблицу
+                    // Добавление истории
                     db.Histories.Add(history);
-
-                    // Сохранение данных
-                    db.SaveChanges();
-
-                    // Добавление данных в промежуточную таблицу
-                    db.TransferHistories.Add(new TransferHistory
-                    {
-                        TransferId = transfer.TransferId,
-                        HistoryId = history.HistoryId
-                    });
-
-                    accountFrom.Balance -= TransferSum;
-                    accountTo.Balance += TransferSum;
                     try
                     {
                         db.SaveChanges();
                     }
                     catch (Exception)
                     {
-                        return Json(new { StatusCode = 204, message = "Что-то пошло не так!" });
+                        return Json(new { StatusCode = 204, message = "При подтверждении перевода, произошла ошибка. Попробуйте позже." });
+                    }
+
+                    // Добавление данных в промежуточную таблицу
+                    db.TransferHistories.Add(new TransferHistory
+                    {
+                        TransferId = Transfer.TransferId,
+                        HistoryId = history.HistoryId
+                    });
+
+                    accountFrom.Balance -= Transfer.TransferSum;
+                    accountTo.Balance += Transfer.TransferSum;
+
+                    // Меняем статус перевода
+                    Transfer.TransferStatus = TransferStatus.Confirmed;
+
+                    try
+                    {
+                        db.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+                        return Json(new { StatusCode = 204, message = "При подтверждении перевода, произошла ошибка. Попробуйте позже." });
                     }
                     transactions.Commit();
                 }
+
+                return Json(new {StatusCode = 200, Message = "Перевод успешно принят"});
             }
-            return Json(new { StatusCode = 200, Message = "Перевод успешно выполнен" });
         }
 
         [HttpPost]

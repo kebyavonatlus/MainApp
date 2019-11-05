@@ -140,6 +140,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserRoleController.cs" />
     <Compile Include="Enums\CurrencyId.cs" />
+    <Compile Include="Enums\TransferStatus.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
