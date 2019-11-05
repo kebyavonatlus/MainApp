@@ -22,6 +22,13 @@ namespace MainApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Создание перевода
+        /// </summary>
+        /// <param name="AccountFrom">int</param>
+        /// <param name="AccountTo">int</param>
+        /// <param name="TransferSum">decimal</param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Transfer(int? AccountFrom, int? AccountTo, decimal TransferSum)
         {
@@ -70,6 +77,11 @@ namespace MainApp.Controllers
             return Json(new { StatusCode = 200, Message = "Перевод успешно создан" });
         }
 
+        /// <summary>
+        /// Подтверждение перевода
+        /// </summary>
+        /// <param name="transferId">int</param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult ConfirmTransfer(int? transferId)
         {
@@ -138,6 +150,11 @@ namespace MainApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Отмена перевода
+        /// </summary>
+        /// <param name="transferId">int</param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult CancelTransfer(int? transferId)
         {
