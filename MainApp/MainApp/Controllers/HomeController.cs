@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MainApp.Providers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -18,17 +19,24 @@ namespace MainApp.Controllers
             return result;
         }
 
-        [Authorize(Roles = "admin")]
+        [CustomAuthorize(Roles = "admin")]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
 
             return View();
         }
-        [Authorize(Roles = "user")]
+        [CustomAuthorize(Roles = "user")]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult Unauthorized()
+        {
+            ViewBag.Message = "You dont have permission!";
             return View();
         }
     }

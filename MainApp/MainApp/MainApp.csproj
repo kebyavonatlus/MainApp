@@ -139,6 +139,7 @@
     <Compile Include="Controllers\UserAccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserRoleController.cs" />
+    <Compile Include="Providers\CustomAuthorize.cs" />
     <Compile Include="Enums\CurrencyId.cs" />
     <Compile Include="Enums\TransferStatus.cs" />
     <Compile Include="Global.asax.cs">
@@ -206,6 +207,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\UserAccount\Register.cshtml" />
     <Content Include="Views\UserAccount\Login.cshtml" />
+    <Content Include="Views\Home\NotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
