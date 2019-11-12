@@ -9,14 +9,19 @@ namespace MainApp.Controllers
 {
     public class HomeController : Controller
     {
-        public string Index()
+        [CustomAuthorize(Roles = "admin")]
+        public ActionResult Index()
         {
-            string result = "Вы не авторизованы";
             if (User.Identity.IsAuthenticated)
             {
-                result = "Ваш логин: " + User.Identity.Name;
+                ViewBag.result = "Ваш логин: " + User.Identity.Name;
             }
-            return result;
+            else
+            {
+                ViewBag.result = "Вы не авторизованы";
+            }
+
+            return View();
         }
 
         [CustomAuthorize(Roles = "admin")]

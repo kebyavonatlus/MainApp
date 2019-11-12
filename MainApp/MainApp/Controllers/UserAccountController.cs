@@ -134,5 +134,11 @@ namespace MainApp.Controllers
             }
             return sb.ToString();
         }
+
+        public ActionResult Logoff()
+        {
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
