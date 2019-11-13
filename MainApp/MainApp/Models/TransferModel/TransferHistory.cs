@@ -7,6 +7,7 @@ namespace MainApp.Models.TransferModel
     {
         [Key,Column(Order = 1)]
         public int TransferId { get; set; }
+
         [Key,Column(Order = 2)]
         public int HistoryId { get; set; }
     }

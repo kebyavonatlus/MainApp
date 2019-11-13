@@ -6,6 +6,7 @@ namespace MainApp.Models.UserModel
     {
         [Key]
         public int RoleId { get; set; }
+
         [Display(Name = "Имя роли")]
         public string RoleName { get; set; }
     }
