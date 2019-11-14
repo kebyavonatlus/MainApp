@@ -20,7 +20,7 @@ namespace MainApp.Controllers
             using (var db = new ConnectionContext())
             {
                 var User = db.Users.FirstOrDefault(u => u.Login == userName);
-                if (User == null) return Json(new { StatusCode = 404, Message = "Пользователь не найден" }, JsonRequestBehavior.AllowGet);
+                if (User == null) return Json(new { StatusCode = 404, Message = "Страница не найдена" }, JsonRequestBehavior.AllowGet);
 
                 var userTransfers = from tranfers in db.Transfers
                     join sentUser in db.Users on tranfers.SenderUserId equals sentUser.UserId
