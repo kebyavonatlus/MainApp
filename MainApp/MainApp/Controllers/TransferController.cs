@@ -7,18 +7,36 @@ using MainApp.Enums;
 using MainApp.Models;
 using MainApp.Models.Histories;
 using MainApp.Models.TransferModel;
+using MainApp.ViewModels;
+using Microsoft.SqlServer.Server;
 
 namespace MainApp.Controllers
 {
     public class TransferController : Controller
     {
         // GET: Transfer
-        public ActionResult Index()
+        public ActionResult Index(string userName)
         {
             using (var db = new ConnectionContext())
             {
-                var transfers = db.Transfers.ToList();
-                return View(transfers);
+                var User = db.Users.FirstOrDefault(u => u.Login == userName);
+                if (User == null) return Json(new { StatusCode = 404, Message = "Пользователь не найден" }, JsonRequestBehavior.AllowGet);
+
+                var userTransfers = from tranfers in db.Transfers
+                    join sentUser in db.Users on tranfers.SenderUserId equals sentUser.UserId
+                    where tranfers.ReceiverUserId == User.UserId || tranfers.SenderUserId == User.UserId
+                    select new TransferViewModel
+                    {
+                        TransferId = tranfers.TransferId,
+                        AccountFrom = tranfers.AccountFrom,
+                        AccountTo = tranfers.AccountTo,
+                        SenderName = sentUser.FullName,
+                        Comment = tranfers.Comment,
+                        TransferSum = tranfers.TransferSum,
+                        TransferDate = tranfers.TransferDate,
+                        TransferStatus = tranfers.TransferStatus == TransferStatus.Created ? "Создан" : "Принят"
+                    };
+                return View(userTransfers.ToList());
             }
         }
 
@@ -82,17 +100,18 @@ namespace MainApp.Controllers
         /// <param name="transferId">int</param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult ConfirmTransfer(int? transferId, int? userId)
+        public ActionResult ConfirmTransfer(int? transferId, string userName)
         {
             using (var db = new ConnectionContext())
             {
                 var Transfer = db.Transfers.FirstOrDefault(t => t.TransferId == transferId);
-                var User = db.Users.FirstOrDefault(u => u.UserId == userId);
+                var User = db.Users.FirstOrDefault(u => u.Login == userName);
 
                 if (Transfer == null) return Json(new {StatusCode = 404, Message = "Перевод не найден"});
                 if (User == null) return Json(new { StatusCode = 404, Message = "Пользователь не найден" });
 
                 if (Transfer.ReceiverUserId != User.UserId) return Json(new { StatusCode = 403, Message = "Невозможно принять перевод. Не соотвествует пользователь" });
+                if (Transfer.TransferStatus == TransferStatus.Confirmed) return Json(new { StatusCode = 203, Message = "Перевод уже принят." });
 
                 var accountFrom = db.Accounts.FirstOrDefault(a => a.AccountNumber == Transfer.AccountFrom);
                 var accountTo = db.Accounts.FirstOrDefault(a => a.AccountNumber == Transfer.AccountTo);
@@ -159,15 +178,19 @@ namespace MainApp.Controllers
         /// <param name="transferId">int</param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult CancelTransfer(int? transferId)
+        public ActionResult CancelTransfer(int? transferId, string userName)
         {
             using (var db = new ConnectionContext())
             {
+                var User = db.Users.FirstOrDefault(u => u.Login == userName);
                 var TransferId = db.Transfers.FirstOrDefault(x => x.TransferId == transferId);
 
                 if (TransferId == null) return Json(new { StatusCode = 404, Message = "Перевод не найден" });
+                if (User == null) return Json(new { StatusCode = 404, Message = "Пользователь не найден" });
 
                 if (TransferId.TransferStatus != TransferStatus.Created) return Json(new { StatusCode = 203, Message = "Невозможно отменить перевод. Перевод уже подтвержден." });
+
+                if (TransferId.SenderUserId != User.UserId) return Json(new { StatusCode = 203, Message = "Невозможно отменить перевод. Только отправитель может отменить перевод" });
 
                 db.Transfers.Remove(TransferId);
 
@@ -182,6 +205,33 @@ namespace MainApp.Controllers
 
             }
             return Json(new { StatusCode = 200, Message = "Перевод успешно отеменен" });
+        }
+
+
+        [HttpGet]
+        public ActionResult UserTransfers(string userName)
+        {
+            using (var db = new ConnectionContext())
+            {
+                var User = db.Users.FirstOrDefault(u => u.Login == userName);
+                if (User == null) return Json(new {StatusCode = 404, Message = "Пользователь не найден"}, JsonRequestBehavior.AllowGet);
+
+                var userTransfers = from tranfers in db.Transfers
+                    join sentUser in db.Users on tranfers.SenderUserId equals sentUser.UserId
+                                    where tranfers.ReceiverUserId == User.UserId
+                    select new TransferViewModel
+                    {
+                        TransferId = tranfers.TransferId,
+                        AccountFrom = tranfers.AccountFrom,
+                        AccountTo = tranfers.AccountTo,
+                        SenderName = sentUser.FullName,
+                        Comment = tranfers.Comment,
+                        TransferSum = tranfers.TransferSum,
+                        TransferDate = tranfers.TransferDate,
+                        TransferStatus = tranfers.TransferStatus == TransferStatus.Created ? "Создан" : "Принят"
+                    };
+                return Json(userTransfers.ToList(), JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }
