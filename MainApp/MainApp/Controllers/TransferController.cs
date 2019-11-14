@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using MainApp.Enums;
 using MainApp.Models;
+using MainApp.Models.AccountModel;
 using MainApp.Models.Histories;
 using MainApp.Models.TransferModel;
 using MainApp.ViewModels;
@@ -40,6 +41,25 @@ namespace MainApp.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult CreateTransfer(string userName)
+        {
+            IQueryable<Account> accounts;
+            using (var db = new ConnectionContext())
+            {
+                var User = db.Users.FirstOrDefault(user => user.Login == userName);
+                if (User == null)
+                {
+                    return Json(new {StatusCode = 404, Message = "Не найден пользователь"});
+                }
+
+                accounts = db.Accounts.Where(a => a.UserId == User.UserId);
+
+                ViewBag.AccountFrom = new SelectList(accounts.Select(x => x.AccountNumber).ToList(), "AccountNumber");
+            }
+            return View();
+        }
+
         /// <summary>
         /// Создание перевода
         /// </summary>
@@ -48,7 +68,7 @@ namespace MainApp.Controllers
         /// <param name="TransferSum">decimal</param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Transfer(int? AccountFrom, int? AccountTo, decimal TransferSum)
+        public ActionResult CreateTransfer(int? AccountFrom, int? AccountTo, decimal TransferSum)
         {
             using (var db = new ConnectionContext())
             {
@@ -56,8 +76,8 @@ namespace MainApp.Controllers
                 var accountTo = db.Accounts.FirstOrDefault(a => a.AccountNumber == AccountTo);
 
                 if (TransferSum <= 0) return Json(new { StatusCode = 405, Message = "Сумма не может быть меньше или равна нулю" });
-                if (AccountFrom == null) return Json(new { StatusCode = 404, Message = "Счет отправителя не найден" });
-                if (AccountTo == null) return Json(new { StatusCode = 404, Message = "Счет получателя не найден" });
+                if (accountFrom == null) return Json(new { StatusCode = 404, Message = "Счет отправителя не найден" });
+                if (accountTo == null) return Json(new { StatusCode = 404, Message = "Счет получателя не найден" });
 
                 if (accountFrom.Balance < TransferSum)
                 {
@@ -98,6 +118,7 @@ namespace MainApp.Controllers
         /// Подтверждение перевода
         /// </summary>
         /// <param name="transferId">int</param>
+        /// <param name="userName">string</param>
         /// <returns></returns>
         [HttpPost]
         public ActionResult ConfirmTransfer(int? transferId, string userName)
@@ -168,7 +189,7 @@ namespace MainApp.Controllers
                     transactions.Commit();
                 }
 
-                return Json(new {StatusCode = 202, Message = "Перевод успешно принят"});
+                return Json(new {StatusCode = 200, Message = "Перевод успешно принят"});
             }
         }
 
@@ -176,6 +197,7 @@ namespace MainApp.Controllers
         /// Отмена перевода
         /// </summary>
         /// <param name="transferId">int</param>
+        /// <param name="userName">string</param>
         /// <returns></returns>
         [HttpPost]
         public ActionResult CancelTransfer(int? transferId, string userName)
@@ -205,33 +227,6 @@ namespace MainApp.Controllers
 
             }
             return Json(new { StatusCode = 200, Message = "Перевод успешно отеменен" });
-        }
-
-
-        [HttpGet]
-        public ActionResult UserTransfers(string userName)
-        {
-            using (var db = new ConnectionContext())
-            {
-                var User = db.Users.FirstOrDefault(u => u.Login == userName);
-                if (User == null) return Json(new {StatusCode = 404, Message = "Пользователь не найден"}, JsonRequestBehavior.AllowGet);
-
-                var userTransfers = from tranfers in db.Transfers
-                    join sentUser in db.Users on tranfers.SenderUserId equals sentUser.UserId
-                                    where tranfers.ReceiverUserId == User.UserId
-                    select new TransferViewModel
-                    {
-                        TransferId = tranfers.TransferId,
-                        AccountFrom = tranfers.AccountFrom,
-                        AccountTo = tranfers.AccountTo,
-                        SenderName = sentUser.FullName,
-                        Comment = tranfers.Comment,
-                        TransferSum = tranfers.TransferSum,
-                        TransferDate = tranfers.TransferDate,
-                        TransferStatus = tranfers.TransferStatus == TransferStatus.Created ? "Создан" : "Принят"
-                    };
-                return Json(userTransfers.ToList(), JsonRequestBehavior.AllowGet);
-            }
         }
     }
 }

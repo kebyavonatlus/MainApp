@@ -38,4 +38,20 @@ namespace MainApp.ViewModels
         [Display(Name = "Статус")]
         public string TransferStatus { get; set; }
     }
+
+    public class CreateTransferViewModel
+    {
+        [Display(Name = "Счет отправителя")]
+        [Required(ErrorMessage = "Выберите счет")]
+        public string AccountFrom { get; set; }
+
+        [Display(Name = "Счет получателя")]
+        [Required(ErrorMessage = "Введите счет получателя")]
+        public string AccountTo { get; set; }
+
+        [Display(Name = "Сумма")]
+        [Required(ErrorMessage = "Введите сумму отправки")]
+        public decimal TransferSum { get; set; }
+        public decimal TransferComission { get; set; }
+    }
 }

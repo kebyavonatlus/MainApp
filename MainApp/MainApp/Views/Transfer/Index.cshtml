@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<MainApp.ViewModels.TransferViewModel>
 
 @{
-    ViewBag.Title = "Переводы";
+    ViewBag.Title = "Список переводов";
 }
 
 <h2>Список переводов</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    <a class="nav-link" href="@Url.Action("CreateTransfer","Transfer")/?userName=@User.Identity.Name">Создать перевод</a>
 </p>
 <table class="table">
     <tr>
@@ -122,9 +122,6 @@
             type: 'POST',
             success: function (data) {
                 confirmTransfer(data);
-                setTimeout(function(){
-                    location.reload();
-                }, 1000);
             },
             error: function (error) {
                 console.log(error);
@@ -134,7 +131,9 @@
         function confirmTransfer(data) {
             if (data.StatusCode == 200) {
                 alertError(data);
-                return
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000);
             } else if (data.StatusCode != 200) {
                 alertError(data);
             }
