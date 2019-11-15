@@ -52,6 +52,9 @@ namespace MainApp.ViewModels
         [Display(Name = "Сумма")]
         [Required(ErrorMessage = "Введите сумму отправки")]
         public decimal TransferSum { get; set; }
+
+        [Display(Name = "Комиссия")]
+        [Required(ErrorMessage = "Введите комиссию отправки")]
         public decimal TransferComission { get; set; }
     }
 }

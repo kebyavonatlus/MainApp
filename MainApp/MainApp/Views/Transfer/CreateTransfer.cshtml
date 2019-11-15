@@ -35,17 +35,20 @@
             </div>
         </div>
 
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.TransferComission, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.TransferComission, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.TransferComission, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.TransferComission, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TransferComission, new { htmlAttributes = new { @class = "form-control TransferComission", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.TransferComission, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="button" onclick="createTransfer()" value="Создать перевод" class="btn btn-primary" />
+                <input type="button" onclick="createTransfer()" value="Создать перевод" disabled="disabled" class="btn btn-success create-transfer-btn" />
+            </div>
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" onclick="GetComission()" value="Рачитать комиссию" class="btn btn-info get-comission-btn" />
             </div>
         </div>
     </div>
@@ -53,8 +56,8 @@
 
 
 @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-    }
+    @Scripts.Render("~/bundles/jqueryval")
+}
 
 <script>
     function alertError(data) {
@@ -78,18 +81,23 @@
         transferSum = event.target.value;
     });
 
+    const transferCommElement = document.querySelector('.TransferSum');
+    transferSumElement.addEventListener('change', (event) => {
+        comission = event.target.value;
+    });
+
     function createTransfer() {
         if (accountFrom === '') {
             alert("Пожалуйста выберите счет");
-            return 
+            return
         }
         if (accountTo === '') {
             alert("Пожалуйста напишите счет для отправки");
-            return 
+            return
         }
         if (transferSum === '') {
             alert("Пожалуйста введите сумму");
-            return 
+            return
         }
         $.ajax({
             url: '@Url.Action("CreateTransfer","Transfer")' + '?AccountFrom=' + accountFrom + '&AccountTo=' + accountTo + '&TransferSum=' + transferSum,
@@ -116,6 +124,31 @@
     }
 
     function GetComission() {
-        
+        $.ajax({
+            url: '@Url.Action("GetComission","Transfer")' + '?TransferSum=' + transferSum,
+            contentType: 'applicaton/json',
+            type: 'POST',
+            success: function(data) {
+                SetCommission(transferSum, data);
+                isActiveButton();
+            },
+            error: function(data) {
+                alertError(data);
+            }
+        });
     }
+
+    function SetCommission(trSum, Comm) {
+        $('input[name=TransferSum]').attr('value', '');
+        $('input[name=TransferSum]').val(parseFloat(trSum) + parseFloat(Comm));
+        $('input[name=TransferComission]').val(Comm);
+    }
+
+    function isActiveButton() {
+        setTimeout(function () {
+            $('.create-transfer-btn').attr('disabled', false);
+        }, 1000);
+    }
+
+
 </script>

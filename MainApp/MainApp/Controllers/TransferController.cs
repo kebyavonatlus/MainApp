@@ -84,6 +84,7 @@ namespace MainApp.Controllers
                     return Json(new { StatusCode = 405, Message = "Недостаточно денег на счете: " + accountFrom.AccountNumber });
                 }
 
+                var comission = GetComission(TransferSum);
                 // Формирование перевода
                 var transfer = new Transfer
                 {
@@ -93,8 +94,8 @@ namespace MainApp.Controllers
                     ReceiverUserId = accountTo.UserId,
                     Comment = accountFrom.AccountName + " выполнил перевод на счет " + accountTo.AccountName,
                     TransferDate = DateTime.Now,
-                    TransferSum = TransferSum,
-                    Comission = 1,
+                    TransferSum = TransferSum + comission,
+                    Comission = comission,
                     TransferStatus = TransferStatus.Created
                 };
                 
@@ -227,6 +228,14 @@ namespace MainApp.Controllers
 
             }
             return Json(new { StatusCode = 200, Message = "Перевод успешно отеменен" });
+        }
+
+        [HttpPost]
+        public decimal GetComission(decimal TransferSum)
+        {
+            decimal persent = 0.1M;
+            decimal result = TransferSum / 100 * persent;
+            return result;
         }
     }
 }

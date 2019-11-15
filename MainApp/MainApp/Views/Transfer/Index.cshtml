@@ -6,9 +6,12 @@
 
 <h2>Список переводов</h2>
 
-<p>
-    <a class="nav-link" href="@Url.Action("CreateTransfer","Transfer")/?userName=@User.Identity.Name">Создать перевод</a>
-</p>
+
+<div class="form-group">
+    <div class="col-sm-4">
+        <a class="nav-link btn btn-success" href="@Url.Action("CreateTransfer","Transfer")/?userName=@User.Identity.Name">Создать перевод</a>
+    </div>
+</div>
 <table class="table">
     <tr>
         <th>
