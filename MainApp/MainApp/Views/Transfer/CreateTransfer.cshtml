@@ -139,7 +139,6 @@
     }
 
     function SetCommission(trSum, Comm) {
-        $('input[name=TransferSum]').attr('value', '');
         $('input[name=TransferSum]').val(parseFloat(trSum) + parseFloat(Comm));
         $('input[name=TransferComission]').val(Comm);
     }
