@@ -95,10 +95,12 @@
     function remove(transferId, userName) {
         function removeTransfer(data) {
             if (data.StatusCode == 200) {
-                const trSelector = 'tr[data-transfer-id="' + transferId + '"]';
-                const trElement = document.querySelector(trSelector);
-                trElement.remove();
                 alertError(data);
+                setTimeout(function () {
+                    const trSelector = 'tr[data-transfer-id="' + transferId + '"]';
+                    const trElement = document.querySelector(trSelector);
+                    trElement.remove();
+                }, 1000);
                 return
             } else if (data.StatusCode != 200) {
                 alertError(data);

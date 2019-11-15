@@ -139,6 +139,7 @@
     <Compile Include="Controllers\UserAccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserRoleController.cs" />
+    <Compile Include="Enums\Gender.cs" />
     <Compile Include="Providers\CustomAuthorize.cs" />
     <Compile Include="Enums\CurrencyId.cs" />
     <Compile Include="Enums\TransferStatus.cs" />
@@ -156,6 +157,7 @@
     <Compile Include="Models\TransferModel\TransferHistory.cs" />
     <Compile Include="Models\UserModel\Role.cs" />
     <Compile Include="Models\UserModel\UserPhoto.cs" />
+    <Compile Include="ViewModels\PaymentViewModel.cs" />
     <Compile Include="ViewModels\TransferViewModel.cs" />
     <Compile Include="ViewModels\UserModels.cs" />
     <Compile Include="Models\UserModel\User.cs" />

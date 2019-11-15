@@ -87,6 +87,18 @@
     });
 
     function createTransfer() {
+
+        function create(data) {
+            if (data.StatusCode == 200) {
+                alert(data.Message);
+                setTimeout(function () {
+                    window.location.href = "/Transfer/Index/?userName=@User.Identity.Name";
+                }, 1000);
+            } else if (data.StatusCode != 200) {
+                alertError(data);
+            }
+        }
+
         if (accountFrom === '') {
             alert("Пожалуйста выберите счет");
             return
@@ -106,24 +118,19 @@
             success: function (data) {
                 create(data);
             },
-            error: function (error) {
+            error: function (data) {
                 alertError(data);
             }
         })
     }
 
-    function create(data) {
-        if (data.StatusCode == 200) {
-            alert(data.Message);
-            setTimeout(function () {
-                window.location.href = "/Transfer/Index/?userName=@User.Identity.Name";
-            }, 1000);
-        } else if (data.StatusCode != 200) {
-            alertError(data);
-        }
-    }
+    
 
     function GetComission() {
+        if (transferSum === '') {
+            alert("Поле сумма не может быть пустым.");
+            return 
+        }
         $.ajax({
             url: '@Url.Action("GetComission","Transfer")' + '?TransferSum=' + transferSum,
             contentType: 'applicaton/json',
@@ -136,18 +143,21 @@
                 alertError(data);
             }
         });
-    }
 
-    function SetCommission(trSum, Comm) {
-        $('input[name=TransferSum]').val(parseFloat(trSum) + parseFloat(Comm));
-        $('input[name=TransferComission]').val(Comm);
-    }
+        function SetCommission(trSum, Comm) {
+            $('input[name=TransferSum]').val(parseFloat(trSum) + parseFloat(Comm));
+            $('input[name=TransferComission]').val(Comm);
+        }
 
-    function isActiveButton() {
-        setTimeout(function () {
-            $('.create-transfer-btn').attr('disabled', false);
-        }, 1000);
-    }
+        function isActiveButton() {
+            setTimeout(function () {
+                $('.create-transfer-btn').attr('disabled', false);
+            }, 500);
+        }
 
+        $( ".TransferSum" ).change(function() {
+            $('.create-transfer-btn').attr('disabled', true);
+        });
+    }
 
 </script>
