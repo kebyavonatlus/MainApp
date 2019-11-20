@@ -1,12 +1,3 @@
-USE MASTER
-GO
-
-CREATE DATABASE Test12
-GO
-
-USE Test12
-GO
-
 CREATE TABLE Users
 (
 	UserId INT PRIMARY KEY IDENTITY(1,1),
@@ -91,7 +82,8 @@ CREATE TABLE dbo.Utilities
 	UtilityName NVARCHAR(300) NOT NULL,
 	UtilityDescription NVARCHAR(300) NULL,
 	UtilityCategoryId INT FOREIGN KEY REFERENCES UtilityCategories(UtilityCategoryId) NOT NULL,
-	UtilityAccountNumber INT FOREIGN KEY REFERENCES dbo.Accounts(AccountNumber) NOT NULL
+	UtilityAccountNumber INT FOREIGN KEY REFERENCES dbo.Accounts(AccountNumber) NOT NULL,
+	UtilityImagePath NVARCHAR(MAX) NULL
 )	
 
 

@@ -1,6 +1,7 @@
 ﻿using System.Data.Entity;
 using MainApp.Models.AccountModel;
 using MainApp.Models.Histories;
+using MainApp.Models.PaymentModel;
 using MainApp.Models.TransferModel;
 using MainApp.Models.UserModel;
 
@@ -46,6 +47,16 @@ namespace MainApp.Models
         /// Промежуточная таблица между историей и переводом
         /// </summary>
         public DbSet<TransferHistory> TransferHistories { get; set; }
+
+        /// <summary>
+        /// Таблица всех услуг
+        /// </summary>
+        public DbSet<Utility> Utilities { get; set; }
+
+        /// <summary>
+        /// Категория услуг
+        /// </summary>
+        public DbSet<UtilityCategory> UtilityCategories { get; set; }
 
     }
 }
