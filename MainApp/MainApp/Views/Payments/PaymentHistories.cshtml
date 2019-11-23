@@ -1,0 +1,54 @@
+﻿@model IEnumerable<MainApp.ViewModels.PaymentViewModelShow>
+
+@{
+    ViewBag.Title = "История операций";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<table class="table tab-pane table-hover table-sm table-info">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.UtilityName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PaymentSum)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PaymentComment)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PaymentDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PaymentStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.userName)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.UtilityName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PaymentSum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PaymentComment)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PaymentDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PaymentStatus)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.userName)
+        </td>
+    </tr>
+}
+
+</table>

@@ -3,9 +3,12 @@ using System.Linq;
 using System.Web.Mvc;
 using MainApp.Models;
 using MainApp.Models.PaymentModel;
+using MainApp.Providers;
 
 namespace MainApp.Controllers
 {
+    [CustomAuthorize(Roles = "admin")]
+
     public class CategoriesController : Controller
     {
         // GET: Categories

@@ -2,7 +2,7 @@
 
 @{
     Layout = null;
-    ViewBag.Title = "Login";
+    ViewBag.Title = "Авторизация";
 }
 
 <!DOCTYPE html>
@@ -30,7 +30,7 @@
 
     <div class="container">
         <div class="card card-login mx-auto mt-5">
-            <div class="card-header">Login</div>
+            <div class="card-header">Авторизация пользователя</div>
             <div class="card-body">
                 @using (Html.BeginForm())
                 {
@@ -54,12 +54,12 @@
                     </div>
 
                     <div class="form-group">
-                        <input type="submit" value="Login" class="btn btn-primary btn-block" />
+                        <input type="submit" value="Войти" class="btn btn-primary btn-block" />
                     </div>
                 }
                 <div class="text-center">
-                    <a class="d-block small mt-3" href="@Url.Action("Register","UserAccount")">Register an Account</a>
-                    <a class="d-block small" href="forgot-password.html">Forgot Password?</a>
+                    <a class="d-block small mt-3" href="@Url.Action("Register","UserAccount")">Регистрация</a>
+                    @*<a class="d-block small" href="forgot-password.html">Forgot Password?</a>*@
                 </div>
             </div>
         </div>

@@ -56,6 +56,7 @@
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -162,6 +163,7 @@
     <Compile Include="Models\UserModel\Role.cs" />
     <Compile Include="Models\UserModel\UserPhoto.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
+    <Compile Include="ViewModels\AccountViewModel.cs" />
     <Compile Include="ViewModels\PaymentViewModel.cs" />
     <Compile Include="ViewModels\TransferViewModel.cs" />
     <Compile Include="ViewModels\UserModels.cs" />
@@ -1971,11 +1973,13 @@
     <Content Include="Views\Categories\EditCategory.cshtml" />
     <Content Include="Views\Payments\Index.cshtml" />
     <Content Include="Views\Payments\Pay.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Account\CreateAccount.cshtml" />
+    <Content Include="Views\Payments\PaymentHistories.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\UploadImages\UtilityImages\" />
-    <Folder Include="Views\Account\" />
     <Folder Include="Views\UserRole\" />
   </ItemGroup>
   <ItemGroup>

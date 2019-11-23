@@ -1,7 +1,6 @@
 ﻿
 @{
-    Layout = null;
-    ViewBag.Title = "Страница не найдена";
+    ViewBag.Title = @ViewBag.Message;
 }
 
 <!DOCTYPE html>
@@ -13,7 +12,9 @@
 </head>
 <body>
 <div>
-    <p>@ViewBag.Message</p>
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.Title
+    </div>
 </div>
 </body>
 </html>

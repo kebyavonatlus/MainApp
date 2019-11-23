@@ -11,77 +11,81 @@
 <p>
     <a class="btn btn-success" href="@Url.Action("CreateTransfer","Transfer")/?userName=@User.Identity.Name">Создать перевод</a>
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.TransferId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AccountFrom)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AccountTo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SenderName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Comment)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TransferSum)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TransferDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TransferStatus)
-        </th>
-        <th></th>
-    </tr>
+<table class="table tab-pane table-hover table-sm table-info">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TransferId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AccountFrom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AccountTo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SenderName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Comment)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TransferSum)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TransferDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TransferStatus)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
 
     @foreach (var item in Model)
     {
-        <tr data-transfer-id="@item.TransferId">
-            <td>
-                @Html.DisplayFor(modelItem => item.TransferId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccountFrom)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccountTo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SenderName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Comment)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TransferSum)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TransferDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TransferStatus)
-            </td>
-            <td>
-                @{
-                    if (item.TransferStatus == "Создан")
-                    {
-                        <button class="btn btn-success" onclick="confirm('@item.TransferId', '@User.Identity.Name')">Принять</button>
-                        <button class="btn btn-danger" onclick="remove('@item.TransferId', '@User.Identity.Name')">Отменить</button>
-                    }
-                    else if (item.TransferStatus == "Принят")
-                    {
-                        <button class="btn btn-success" disabled="disabled">Принять</button>
-                        <button class="btn btn-danger" disabled="disabled">Отменить</button>
-                    }
+<tbody>
+    <tr data-transfer-id="@item.TransferId">
+        <td>
+            @Html.DisplayFor(modelItem => item.TransferId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AccountFrom)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AccountTo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SenderName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Comment)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TransferSum)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TransferDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TransferStatus)
+        </td>
+        <td>
+            @{
+                if (item.TransferStatus == "Создан")
+                {
+                    <button class="btn btn-success" onclick="confirm('@item.TransferId', '@User.Identity.Name')">Принять</button>
+                    <button class="btn btn-danger" onclick="remove('@item.TransferId', '@User.Identity.Name')">Отменить</button>
                 }
-            </td>
-        </tr>
+                else if (item.TransferStatus == "Принят")
+                {
+                    <button class="btn btn-success" disabled="disabled">Принять</button>
+                    <button class="btn btn-danger" disabled="disabled">Отменить</button>
+                }
+            }
+        </td>
+    </tr>
+</tbody>
     }
 
 </table>
@@ -105,18 +109,19 @@
                 alertError(data);
             }
         }
+
         $.ajax({
             url: '@Url.Action("CancelTransfer","Transfer")' + '?transferId=' + transferId + '&userName=' + userName,
             contentType: 'applicaton/json',
             type: 'POST',
-            success: function (data) {
+            success: function(data) {
                 removeTransfer(data);
                 console.log(data);
             },
-            error: function (error) {
+            error: function(error) {
                 console.log(error);
             }
-        })
+        });
     }
 
     function confirm(transferId, userName) {
@@ -143,4 +148,5 @@
             }
         }
     }
+
 </script>

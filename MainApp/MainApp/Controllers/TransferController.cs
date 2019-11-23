@@ -8,11 +8,13 @@ using MainApp.Models;
 using MainApp.Models.AccountModel;
 using MainApp.Models.Histories;
 using MainApp.Models.TransferModel;
+using MainApp.Providers;
 using MainApp.ViewModels;
 using Microsoft.SqlServer.Server;
 
 namespace MainApp.Controllers
 {
+    [CustomAuthorize(Roles = "admin, user")]
     public class TransferController : Controller
     {
         // GET: Transfer
@@ -20,24 +22,46 @@ namespace MainApp.Controllers
         {
             using (var db = new ConnectionContext())
             {
-                var User = db.Users.FirstOrDefault(u => u.Login == userName);
-                if (User == null) return Json(new { StatusCode = 404, Message = "Страница не найдена" }, JsonRequestBehavior.AllowGet);
+                IQueryable<TransferViewModel> userTransfers = null;
+                var UserName = db.Users.FirstOrDefault(u => u.Login == userName);
+                if (UserName == null) return HttpNotFound("Не удалось найти страницу");
 
-                var userTransfers = from tranfers in db.Transfers
-                    join sentUser in db.Users on tranfers.SenderUserId equals sentUser.UserId
-                    where tranfers.ReceiverUserId == User.UserId || tranfers.SenderUserId == User.UserId
-                    select new TransferViewModel
-                    {
-                        TransferId = tranfers.TransferId,
-                        AccountFrom = tranfers.AccountFrom,
-                        AccountTo = tranfers.AccountTo,
-                        SenderName = sentUser.FullName,
-                        Comment = tranfers.Comment,
-                        TransferSum = tranfers.TransferSum,
-                        TransferDate = tranfers.TransferDate,
-                        TransferStatus = tranfers.TransferStatus == TransferStatus.Created ? "Создан" : "Принят"
-                    };
-                return View(userTransfers.ToList());
+                if (User.IsInRole("admin"))
+                {
+                    userTransfers = from tranfers in db.Transfers
+                        join sentUser in db.Users on tranfers.SenderUserId equals sentUser.UserId
+                        select new TransferViewModel
+                        {
+                            TransferId = tranfers.TransferId,
+                            AccountFrom = tranfers.AccountFrom,
+                            AccountTo = tranfers.AccountTo,
+                            SenderName = sentUser.FullName,
+                            Comment = tranfers.Comment,
+                            TransferSum = tranfers.TransferSum,
+                            TransferDate = tranfers.TransferDate,
+                            TransferStatus = tranfers.TransferStatus == TransferStatus.Created ? "Создан" : "Принят"
+                        };
+                    return View(userTransfers.ToList());
+                }
+                else
+                {
+                    userTransfers = from tranfers in db.Transfers
+                        join sentUser in db.Users on tranfers.SenderUserId equals sentUser.UserId
+                        where tranfers.ReceiverUserId == UserName.UserId || tranfers.SenderUserId == UserName.UserId
+                        select new TransferViewModel
+                        {
+                            TransferId = tranfers.TransferId,
+                            AccountFrom = tranfers.AccountFrom,
+                            AccountTo = tranfers.AccountTo,
+                            SenderName = sentUser.FullName,
+                            Comment = tranfers.Comment,
+                            TransferSum = tranfers.TransferSum,
+                            TransferDate = tranfers.TransferDate,
+                            TransferStatus = tranfers.TransferStatus == TransferStatus.Created ? "Создан" : "Принят"
+                        };
+                    return View(userTransfers.ToList());
+                }
+
             }
         }
 

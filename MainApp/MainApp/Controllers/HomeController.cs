@@ -9,7 +9,7 @@ namespace MainApp.Controllers
 {
     public class HomeController : Controller
     {
-        [CustomAuthorize(Roles = "admin")]
+        [CustomAuthorize(Roles = "admin, user")]
         public ActionResult Index()
         {
             if (User.Identity.IsAuthenticated)
@@ -24,14 +24,7 @@ namespace MainApp.Controllers
             return View();
         }
 
-        [CustomAuthorize(Roles = "admin")]
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-        [CustomAuthorize(Roles = "user")]
+        [CustomAuthorize(Roles = "admin, user")]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
@@ -41,7 +34,7 @@ namespace MainApp.Controllers
         [Authorize]
         public ActionResult Unauthorized()
         {
-            ViewBag.Message = "You dont have permission!";
+            ViewBag.Message = "У вас нет доступа на эту страницу.";
             return View();
         }
     }

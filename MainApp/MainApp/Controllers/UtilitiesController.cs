@@ -8,10 +8,13 @@ using System.Web.Mvc;
 using MainApp.Models;
 using MainApp.Models.AccountModel;
 using MainApp.Models.PaymentModel;
+using MainApp.Providers;
 using MainApp.ViewModels;
 
 namespace MainApp.Controllers
 {
+
+    [CustomAuthorize(Roles = "admin")]
     public class UtilitiesController : Controller
     {
         // GET: Utilities

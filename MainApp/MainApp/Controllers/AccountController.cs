@@ -4,23 +4,76 @@ using System.Web.Mvc;
 using MainApp.Enums;
 using MainApp.Models;
 using MainApp.Models.AccountModel;
+using MainApp.Models.UserModel;
+using MainApp.Providers;
+using MainApp.ViewModels;
 
 namespace MainApp.Controllers
 {
+    [CustomAuthorize(Roles = "admin, user")]
+
     public class AccountController : Controller
     {
-        [HttpPost]
-        public ActionResult CreateAccount(int? userId, int? currency)
+        public ActionResult Index(string userName)
         {
-            if (userId == null) return Json(new {StatusCode = 404, Message = "Не найден пользователь"}); 
-            if (currency == null) return Json(new { StatusCode = 404, Message = "Не найдена валюта" }); 
+            User UserName;
             using (var db = new ConnectionContext())
             {
-                var user = db.Users.Find(userId);
+                UserName = db.Users.FirstOrDefault(x => x.Login == userName);
+                if (UserName == null)
+                {
+                    return HttpNotFound("Не удалось найти страницу");
+                }
+
+                if (User.IsInRole("admin"))
+                {
+                    var accounts = from a in db.Accounts
+                        select new AccountViewModel
+                        {
+                            AccountName = a.AccountName,
+                            AccountNumber = a.AccountNumber,
+                            AccountOpenDate = a.AccountOpenDate,
+                            Balance = a.Balance,
+                            Currency = "KGS"
+                        };
+                    return View(accounts.ToList());
+                }
+                else
+                {
+                    var accounts = from a in db.Accounts
+                        where a.UserId == UserName.UserId
+                        select new AccountViewModel
+                        {
+                            AccountName = a.AccountName,
+                            AccountNumber = a.AccountNumber,
+                            AccountOpenDate = a.AccountOpenDate,
+                            Balance = a.Balance,
+                            Currency = "KGS"
+                        };
+                    return View(accounts.ToList());
+                }
+            }
+
+
+        }
+
+        [HttpGet]
+        public ActionResult CreateAccount()
+        {
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult CreateAccount(CreateAccountView createAccount)
+        {
+            using (var db = new ConnectionContext())
+            {
+                var user = db.Users.FirstOrDefault(u => u.Login == createAccount.userName);
                 db.Accounts.Add(new Account
                 {
                     AccountName = user.FullName,
-                    Currency = (CurrencyId)currency,
+                    Currency = CurrencyId.KGS,
                     AccountOpenDate = DateTime.Now,
                     UserId = user.UserId
                 });
@@ -34,7 +87,7 @@ namespace MainApp.Controllers
                     return Json(new {StatusCode = 406, Message = "Не удалось созать счет."});
                 }
 
-                return Json(new {StatusCode = 200, Message = "Счет успешно создан."});
+                return RedirectToAction("Index", new { createAccount.userName});
             }
         }
         [AllowAnonymous]
@@ -59,12 +112,5 @@ namespace MainApp.Controllers
             return Json(new {StatusCode = 200, Message = "Счет успешно пополнен на сумму " + refillSum});
         }
 
-        public ActionResult GenerateAccount()
-        {
-
-
-
-            return View();
-        }
     }
 }
