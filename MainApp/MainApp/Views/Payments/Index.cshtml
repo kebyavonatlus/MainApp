@@ -1,0 +1,60 @@
+﻿@model IEnumerable<MainApp.Models.PaymentModel.UtilityCategory>
+
+@{
+    ViewBag.Title = "Услуги";
+}
+
+
+
+<h2>@ViewBag.Title</h2>
+
+<ul class="nav nav-pills">
+    @foreach (var item in Model)
+    {
+        <li><a class="btn btn-outline-secondary" data-toggle="pill" onclick="GetUtilities(@item.UtilityCategoryId)" href="#cat_@item.UtilityCategoryId">@Html.DisplayFor(modelItem => item.UtilityCategoryName)</a></li>
+    }
+</ul>
+
+<div class="tab-content">
+    @foreach (var item in Model)
+    {
+        <div id="cat_@item.UtilityCategoryId" class="tab-pane fade in active">
+            <br />
+            <table data-category-id="@item.UtilityCategoryId" class="table">
+                <thead>
+                    <tr>
+                        <td>Наименование</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+
+<script>
+    function GetUtilities(categoryId) {
+        function parseData(result) {
+            for (var i = 0; i < result.length; i++) {
+                $('.table').append('<tr><td>' + result[i].UtilityName + '</td><td>' + '<img src="' + result[i].UtilityImagePath.substring(1) +  '" width="50" height="50" />' + '</td><td>' + '<a href="/Payments/Pay?id=' + result[i].UtilityId + '&userName=@User.Identity.Name' +'" target="_blank" class="btn btn-success">Оплатить</a>' + '</td></tr>');
+            }
+        }
+
+        $.ajax({
+            url: '@Url.Action("GetUtility","Payments")' + '?categoryId=' + categoryId,
+            contentType: 'applicaton/json',
+            type: 'POST',
+            success: function (data) {
+                $('.table tbody tr').remove();
+                parseData(data);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+</script>

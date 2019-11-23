@@ -11,7 +11,7 @@
     <meta name="author" content="">
 
     <title>@ViewBag.Title</title>
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     <!-- Custom fonts for this template-->
     <link href="~/Content/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -21,7 +21,7 @@
 
     <!-- Custom styles for this template-->
     <link href="~/Content/css/sb-admin.css" rel="stylesheet">
-
+    
 </head>
 
 <body id="page-top">
@@ -124,6 +124,24 @@
                     <i class="fas fa fa-list-alt"></i>
                     <span>Переводы</span>
                 </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Index","Payments")">
+                    <i class="fas fa fa-list"></i>
+                    <span>Услуги</span>
+                </a>
+            </li>
+            
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Справочник</span>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+                    <a class="dropdown-item" href="@Url.Action("Index","Utilities")">Список услуг</a>
+                    <a class="dropdown-item" href="@Url.Action("Index","Categories")">Список категорий</a>
+                </div>
             </li>
         </ul>
 

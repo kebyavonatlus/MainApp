@@ -1,57 +1,61 @@
-﻿@model IEnumerable<MainApp.Models.PaymentModel.Utility>
+﻿@model IEnumerable<MainApp.ViewModels.UtilityViewModel>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Список всех услуг";
 }
 
-<h2>Index</h2>
-
+<h3>@ViewBag.Title</h3>
 <p>
-    @Html.ActionLink("Создать услугу", "Create")
+    <a class="btn btn-success" href="@Url.Action("Create", "Utilities")">Создать услугу</a>
 </p>
 <table class="table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.UtilityName)
         </th>
+
         <th>
-            @Html.DisplayNameFor(model => model.UtilityDescription)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UtilityCategoryId)
+            @Html.DisplayNameFor(model => model.UtilityCategoryName)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.UtilityAccountNumber)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.UtilityImagePath)
+            @Html.DisplayNameFor(model => model.UtilityDescription)
         </th>
-        <th></th>
+        <th>
+
+        </th>
+        <th>
+
+        </th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.UtilityName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UtilityDescription)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UtilityCategoryId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UtilityAccountNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UtilityImagePath)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.UtilityId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.UtilityId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.UtilityId })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UtilityName)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.UtilityCategoryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UtilityAccountNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UtilityDescription)
+            </td>
+            <td>
+                <img src="@Url.Content(item.UtilityImagePath)" alt="@Url.Content(item.UtilityName)" width="50" height="50" />
+            </td>
+            <td>
+                @Html.ActionLink("Изменить", "Edit", new { id = item.UtilityId }, new {@class = "btn btn-info"})
+                @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+            </td>
+        </tr>
+    }
 
 </table>

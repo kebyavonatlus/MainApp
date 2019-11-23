@@ -1,0 +1,154 @@
+﻿@model MainApp.ViewModels.PaymentViewModel
+
+@{
+    ViewBag.Title = "Оплата";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AccountFrom, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.AccountFrom, null, "Выберите счет", new { @class = "form-control AccountFrom", @required = "required" })
+                @Html.ValidationMessageFor(model => model.AccountFrom, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UtilityName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.UtilityName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.UtilityName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+        @Html.LabelFor(model => model.UtilityCategoryName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.UtilityCategoryName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(model => model.UtilityCategoryName, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+
+        @*<div class="form-group">
+        <div class="col-md-10">
+            <img src="@Url.Content(Model.UtilityImagePath)" alt="@Url.Content(Model.UtilityName)" width="80" height="80" />
+        </div>
+    </div>*@
+    
+        <div class="form-group">
+            <label class="control-label col-md-2">Лицевой счет</label>
+            <div class="col-md-10">
+                <input class="form-control personalAccount" type="text" name="personalAccount" value="" />
+            </div>
+        </div>
+    
+        <div class="form-group" >
+            <label class="control-label col-md-2">Наименование</label>
+            <div class="col-md-10">
+                <input class="form-control personalAccountName" type="text" name="personalAccountName" value="" readonly="readonly" />
+            </div>
+        </div>
+    
+        <div class="form-group paySum" hidden="hidden">
+            <label class="control-label col-md-2">Сумма</label>
+            <div class="col-md-10">
+                <input class="form-control paySum " type="number" name="transferSum" value=""  />
+            </div>
+        </div>
+    
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" onclick="pay()" value="Оплатить" class="btn btn-success payButton" disabled="disabled" />
+            </div>
+        </div>
+        
+    </div>
+
+
+}
+
+
+<script>
+    var perAcc = '';
+    var accountFrom = '';
+    var paySum = '';
+
+    const personalAccountElement = document.querySelector('.personalAccount');
+    personalAccountElement.addEventListener('change',
+        (event) => {
+            perAcc = event.target.value;
+        });
+    const accountFromElement = document.querySelector('.AccountFrom');
+    accountFromElement.addEventListener('change', (event) => {
+        accountFrom = event.target.value;
+    });
+
+    const paySumElement = document.querySelector('.paySum');
+    paySumElement.addEventListener('change', (event) => {
+        paySum = event.target.value;
+    });
+
+    $(document).on('change', '.personalAccount', function() {
+        $.ajax({
+            url: '@Url.Action("CheckPersonalAccount", "Payments")' + '?personalAccount=' + perAcc + '&utilityId=@Model.UtilityId' ,
+            contentType: 'applicaton/json',
+            type: 'GET',
+            success: function (data) {
+                parseData(data);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+
+        function parseData(data) {
+            if (data.StatusCode === 404) {
+                alert(data.Message);
+            }else {
+                $('.personalAccountName').val(data.Name);
+                $('.paySum').attr('hidden', false);
+            }
+        };
+    });
+
+    $(document).on('change', '.paySum', function() {
+        $('.payButton').attr('disabled', false);
+    });
+
+
+    function pay() {
+        if (accountFrom === '') {
+            alert("Пожалуйста выберите счет.");
+        };
+        $.ajax({
+            url: '@Url.Action("Pay", "Payments")' +  '?accountFrom=' + accountFrom  + '&personalAccount=' + perAcc + '&paySum=' + paySum + '&utilityId=@Model.UtilityId',
+            contentType: 'applicaton/json',
+            type: 'POST',
+            success: function (data) {
+                parseData(data);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+
+
+        function parseData(data) {
+            alert(data.Message);
+        };
+    }
+
+
+   
+</script>

@@ -1,0 +1,37 @@
+﻿@model IEnumerable<MainApp.Models.PaymentModel.UtilityCategory>
+
+@{
+    ViewBag.Title = "Список категорий";
+}
+
+<h3>@ViewBag.Title</h3>
+
+<p>
+    <a class="btn btn-success" href="@Url.Action("CreateCategory", "Categories")">Создать категорию</a>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.UtilityCategoryName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UtilityCategoryDescription)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.UtilityCategoryName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UtilityCategoryDescription)
+        </td>
+        <td>
+            @Html.ActionLink("Именить", "EditCategory", new { id=item.UtilityCategoryId }, new {@class = "btn btn-info"})
+        </td>
+    </tr>
+}
+
+</table>

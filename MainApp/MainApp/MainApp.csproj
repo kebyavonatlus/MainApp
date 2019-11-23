@@ -135,12 +135,15 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\PaymentsController.cs" />
     <Compile Include="Controllers\TransferController.cs" />
     <Compile Include="Controllers\UserAccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserRoleController.cs" />
     <Compile Include="Controllers\UtilitiesController.cs" />
     <Compile Include="Enums\Gender.cs" />
+    <Compile Include="Enums\PaymentStatus.cs" />
+    <Compile Include="Models\AccountModel\PersonalAccount.cs" />
     <Compile Include="Providers\CustomAuthorize.cs" />
     <Compile Include="Enums\CurrencyId.cs" />
     <Compile Include="Enums\TransferStatus.cs" />
@@ -158,6 +161,7 @@
     <Compile Include="Models\TransferModel\TransferHistory.cs" />
     <Compile Include="Models\UserModel\Role.cs" />
     <Compile Include="Models\UserModel\UserPhoto.cs" />
+    <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="ViewModels\PaymentViewModel.cs" />
     <Compile Include="ViewModels\TransferViewModel.cs" />
     <Compile Include="ViewModels\UserModels.cs" />
@@ -1962,6 +1966,11 @@
     <Content Include="Views\Utilities\Create.cshtml" />
     <Content Include="Views\Utilities\Edit.cshtml" />
     <Content Include="Views\Utilities\Index.cshtml" />
+    <Content Include="Views\Categories\Index.cshtml" />
+    <Content Include="Views\Categories\CreateCategory.cshtml" />
+    <Content Include="Views\Categories\EditCategory.cshtml" />
+    <Content Include="Views\Payments\Index.cshtml" />
+    <Content Include="Views\Payments\Pay.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

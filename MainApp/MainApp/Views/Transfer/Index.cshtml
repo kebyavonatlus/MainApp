@@ -7,11 +7,10 @@
 <h2>Список переводов</h2>
 
 
-<div class="form-group">
-    <div class="col-sm-4">
-        <a class="nav-link btn btn-success" href="@Url.Action("CreateTransfer","Transfer")/?userName=@User.Identity.Name">Создать перевод</a>
-    </div>
-</div>
+
+<p>
+    <a class="btn btn-success" href="@Url.Action("CreateTransfer","Transfer")/?userName=@User.Identity.Name">Создать перевод</a>
+</p>
 <table class="table">
     <tr>
         <th>

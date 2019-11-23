@@ -73,7 +73,7 @@ CREATE TABLE dbo.UtilityCategories
 (
 	UtilityCategoryId INT PRIMARY KEY IDENTITY(1,1),
 	UtilityCategoryName NVARCHAR(300) NOT NULL,
-	UtilityCategoryDescription NVARCHAR(300) NOT NULL
+	UtilityCategoryDescription NVARCHAR(300) NULL
 )
 
 CREATE TABLE dbo.Utilities
@@ -95,6 +95,7 @@ CREATE TABLE dbo.Payments
 	PaymentSum NUMERIC(15,2) NOT NULL,
 	PaymentComment NVARCHAR(200) NOT NULL,
 	PaymentDate DATETIME NOT NULL,
+	PaymentStatus BIT NOT NULL,
 	UserId INT FOREIGN KEY REFERENCES dbo.Users(UserId) NOT NULL
 )
 

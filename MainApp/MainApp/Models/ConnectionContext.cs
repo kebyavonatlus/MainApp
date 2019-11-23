@@ -58,5 +58,20 @@ namespace MainApp.Models
         /// </summary>
         public DbSet<UtilityCategory> UtilityCategories { get; set; }
 
+        /// <summary>
+        /// Лицевые счета клиентов сторонних сервисов
+        /// </summary>
+        public DbSet<PersonalAccount> PersonalAccounts { get; set; }
+
+
+        /// <summary>
+        /// Все платежи
+        /// </summary>
+        public DbSet<Payment> Payments { get; set; }
+
+        /// <summary>
+        /// Промежуточная таблица
+        /// </summary>
+        public DbSet<PaymentHistory> PaymentHistories { get; set; }
     }
 }

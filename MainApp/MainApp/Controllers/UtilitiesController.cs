@@ -19,16 +19,19 @@ namespace MainApp.Controllers
         {
             using (var db = new ConnectionContext())
             {
-                var utility = db.Utilities.ToList();
+                var utility = from u in db.Utilities join c in db.UtilityCategories on u.UtilityCategoryId equals c.UtilityCategoryId 
+                    select new UtilityViewModel
+                    {
+                        UtilityAccountNumber = u.UtilityAccountNumber,
+                        UtilityName = u.UtilityName,
+                        UtilityCategoryName = c.UtilityCategoryName,
+                        UtilityDescription = u.UtilityDescription,
+                        UtilityImagePath = u.UtilityImagePath,
+                        UtilityId = u.UtilityId
+                    };
 
-                return View(utility);
+                return View(utility.ToList());
             }
-        }
-
-        // GET: Utilities/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
         }
 
         // GET: Utilities/Create
@@ -52,6 +55,7 @@ namespace MainApp.Controllers
         [HttpPost]
         public ActionResult Create(UtilityViewModel utility)
         {
+            ModelState.Clear();
             Account uAcountNo = null;
             using (var db = new ConnectionContext())
             {
@@ -101,7 +105,7 @@ namespace MainApp.Controllers
                     fileName = Path.Combine(Server.MapPath("~/Content/UploadImages/UtilityImages/"), fileName);
                     utility.ImageFile.SaveAs(fileName);
 
-                    return RedirectToAction("Create");
+                    return RedirectToAction("Index");
 
                 }
             }
@@ -215,28 +219,6 @@ namespace MainApp.Controllers
             }
 
             return View(utility);
-        }
-
-        // GET: Utilities/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Utilities/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
         }
     }
 }

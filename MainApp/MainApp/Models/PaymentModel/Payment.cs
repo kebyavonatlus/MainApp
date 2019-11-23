@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using MainApp.Enums;
 
 namespace MainApp.Models.PaymentModel
 {
@@ -16,7 +17,7 @@ namespace MainApp.Models.PaymentModel
         [Display(Name = "Сумма")]
         public decimal PaymentSum { get; set; }
 
-        //[Required(ErrorMessage = "Обзательное поле для заполенения \"Комиссия\"")]
+        [Required(ErrorMessage = "Обзательное поле для заполенения \"Комиссия\"")]
         [Display(Name = "Комиссия")]
         public decimal PaymentComission { get; set; }
 
@@ -27,6 +28,10 @@ namespace MainApp.Models.PaymentModel
         [Required(ErrorMessage = "Обзательное поле для заполенения \"Дата операции\"")]
         [Display(Name = "Дата операции")]
         public DateTime PaymentDate { get; set; }
+
+        [Required(ErrorMessage = "Обзательное поле для заполенения \"Статус\"")]
+        [Display(Name = "Статус")]
+        public PaymentStatus PaymentStatus { get; set; }
 
         [Required(ErrorMessage = "Обзательное поле для заполенения \"User ID\"")]
         [Display(Name = "User ID")]

@@ -34,7 +34,7 @@ namespace MainApp.Controllers
                     return Json(new {StatusCode = 406, Message = "Не удалось созать счет."});
                 }
 
-                return Json(new {StatusCode = 201, Message = "Счет успешно создан."});
+                return Json(new {StatusCode = 200, Message = "Счет успешно создан."});
             }
         }
         [AllowAnonymous]
@@ -57,6 +57,14 @@ namespace MainApp.Controllers
                 }
             }
             return Json(new {StatusCode = 200, Message = "Счет успешно пополнен на сумму " + refillSum});
+        }
+
+        public ActionResult GenerateAccount()
+        {
+
+
+
+            return View();
         }
     }
 }

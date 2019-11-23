@@ -7,7 +7,7 @@ namespace MainApp.Models.PaymentModel
         [Key]
         public int UtilityCategoryId { get; set; }
 
-        [Required(ErrorMessage = "Обзательное поле для заполенения \"Наименование категорий\"")]
+        [Required(ErrorMessage = "Обзательное поле для заполенения \"Наименование категории\"")]
         [Display(Name = "Наименование категории")]
         public string UtilityCategoryName { get; set; }
 
