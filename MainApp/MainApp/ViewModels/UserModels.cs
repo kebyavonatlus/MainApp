@@ -48,6 +48,7 @@ namespace MainApp.ViewModels
 
         [Required(ErrorMessage = "Введите ИНН")]
         [Display(Name = "ИНН")]
+        [RegularExpression("^[0-9]*$", ErrorMessage = "ИНН должен состоять только из цифр")]
         public string IdentificationNumber { get; set; }
 
         [Required(ErrorMessage = "Введите дату рождения")]
@@ -63,8 +64,20 @@ namespace MainApp.ViewModels
         [Display(Name = "Получать рассылку")]
         public bool? SendToEmail { get; set; }
 
-        [Required(ErrorMessage = "Выберите пол")]
-        [Display(Name = "Пол")]
-        public Gender Gender { get; set; }
+        [Display(Name = "Адрес")]
+        public string Address { get; set; }
+    }
+
+    public class UserChangePassword
+    {
+        public string UserName { get; set; }
+        [Display(Name = "Новый пароль")]
+        [DataType(DataType.Password)]
+        public string NewPassword { get; set; }
+        [Display(Name = "Повтор нового пароля")]
+        [DataType(DataType.Password)]
+        [Compare("NewPassword", ErrorMessage = "Пароли не совпадают")]
+        public string ConfirmNewPassword { get; set; }
+
     }
 }

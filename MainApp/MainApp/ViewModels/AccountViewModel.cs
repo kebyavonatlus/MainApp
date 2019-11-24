@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using MainApp.Enums;
+using Microsoft.VisualBasic;
 
 namespace MainApp.ViewModels
 {

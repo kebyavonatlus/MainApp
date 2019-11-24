@@ -136,6 +136,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\HistoriesController.cs" />
     <Compile Include="Controllers\PaymentsController.cs" />
     <Compile Include="Controllers\TransferController.cs" />
     <Compile Include="Controllers\UserAccountController.cs" />
@@ -164,6 +165,7 @@
     <Compile Include="Models\UserModel\UserPhoto.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
+    <Compile Include="ViewModels\HistoriesViewModel.cs" />
     <Compile Include="ViewModels\PaymentViewModel.cs" />
     <Compile Include="ViewModels\TransferViewModel.cs" />
     <Compile Include="ViewModels\UserModels.cs" />
@@ -1976,10 +1978,16 @@
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\CreateAccount.cshtml" />
     <Content Include="Views\Payments\PaymentHistories.cshtml" />
+    <Content Include="Views\UserAccount\Users.cshtml" />
+    <Content Include="Views\UserAccount\ChangePassword.cshtml" />
+    <Content Include="Views\Shared\Success.cshtml" />
+    <Content Include="Views\UserAccount\UserProfile.cshtml" />
+    <Content Include="Views\Histories\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\UploadImages\UtilityImages\" />
+    <Folder Include="Models\Conversion\" />
     <Folder Include="Views\UserRole\" />
   </ItemGroup>
   <ItemGroup>

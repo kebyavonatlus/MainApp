@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using MainApp.Enums;
 
 namespace MainApp.Models.UserModel
 {
@@ -29,11 +30,18 @@ namespace MainApp.Models.UserModel
         public string IdentificationNumber { get; set; }
 
         [Display(Name = "Дата рождения")]
+        [DataType(DataType.Date)]
         public DateTime? BirthDate { get; set; }
 
         [Display(Name = "Адрес")]
         public string Address { get; set; }
 
         public bool? IsCustomer { get; set; }
+
+        public bool? EmailAccepted { get; set; }
+
+        public bool? SendToEmail { get; set; }
+
+
     }
 }

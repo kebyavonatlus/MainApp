@@ -84,8 +84,8 @@
                     <i class="fas fa-user-circle fa-fw"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="#">Settings</a>
-                    <a class="dropdown-item" href="#">Activity Log</a>
+                    <a class="dropdown-item" href="@Url.Action("UserProfile","UserAccount")">Изменить профиль</a>
+                    <a class="dropdown-item" href="@Url.Action("ChangePassword","UserAccount")">Сменить пароль</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="" data-toggle="modal" data-target="#logoutModal">Выход</a>
                 </div>
@@ -142,7 +142,7 @@
 
             <li class="nav-item">
                 <a class="nav-link" href="@Url.Action("PaymentHistories","Payments", new {@userName = User.Identity.Name})">
-                    <i class="fas fa fa-list"></i>
+                    <i class="fas fa-stream"></i>
                     <span>История услуг</span>
                 </a>
             </li>
@@ -156,7 +156,15 @@
                     <div class="dropdown-menu" aria-labelledby="pagesDropdown">
                         <a class="dropdown-item" href="@Url.Action("Index","Utilities")">Список услуг</a>
                         <a class="dropdown-item" href="@Url.Action("Index","Categories")">Список категорий</a>
+                        <a class="dropdown-item" href="@Url.Action("Users","UserAccount")">Пользователи</a>
                     </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index","Histories")">
+                        
+                        <i class="fas fa-history"></i>
+                        <span>История всех платежей</span>
+                    </a>
                 </li>
             }
         </ul>

@@ -51,9 +51,7 @@
                 <img src="@Url.Content(item.UtilityImagePath)" alt="@Url.Content(item.UtilityName)" width="50" height="50" />
             </td>
             <td>
-                @Html.ActionLink("Изменить", "Edit", new { id = item.UtilityId }, new {@class = "btn btn-info"})
-                @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+                <a href="@Url.Action("Edit", "Utilities",new { @id = item.UtilityId})" class="btn btn-info">Изменить</a>
             </td>
         </tr>
     }

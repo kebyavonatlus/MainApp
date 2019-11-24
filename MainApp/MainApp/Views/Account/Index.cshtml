@@ -9,6 +9,11 @@
 <p>
     @Html.ActionLink("Создать счет", "CreateAccount", null, new {@class="btn btn-success"})
 </p>
+@if (User.IsInRole("admin")) {
+    <p>
+        @Html.ActionLink("Пополнить счет", "Refill", null, new { @class = "btn btn-success" })
+    </p>
+}
 <table class="table tab-pane table-hover table-sm table-info" >
     <thead>
         <tr>

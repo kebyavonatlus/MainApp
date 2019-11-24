@@ -138,6 +138,7 @@ namespace MainApp.Controllers
                               where u.UtilityId == id
                               select new UtilityViewModel
                               {
+                                  UtilityId = u.UtilityId,
                                   UtilityCategoryId = u.UtilityCategoryId,
                                   UtilityAccountNumber = u.UtilityAccountNumber,
                                   UtilityDescription = u.UtilityDescription,
@@ -150,77 +151,25 @@ namespace MainApp.Controllers
 
         // POST: Utilities/Edit/5
         [HttpPost]
-        public ActionResult Edit(int? id, UtilityViewModel utility)
+        public ActionResult Edit(UtilityViewModel utility)
         {
             using (var db = new ConnectionContext())
             {
-                var uAcountNo = db.Accounts.FirstOrDefault(a => a.AccountNumber == utility.UtilityAccountNumber);
-                if (uAcountNo == null)
+                var Utility = db.Utilities.FirstOrDefault(x => x.UtilityId == utility.UtilityId);
+
+                using (var transaction = db.Database.BeginTransaction())
                 {
-                    ModelState.AddModelError(string.Empty, "Не найден счет.");
-                }
-                var updateUtility = db.Utilities.FirstOrDefault(a => a.UtilityId == id);
-
-                if (updateUtility == null)
-                {
-                    ModelState.AddModelError(string.Empty, "Не найден ID услуги");
-                }
-
-                var categories = db.UtilityCategories.ToList();
-                ViewBag.UtilityCategories = categories.Select(r => new SelectListItem
-                {
-                    Value = r.UtilityCategoryId.ToString(),
-                    Text = r.UtilityCategoryName
-                }).ToList();
-
-            }
-
-            if (ModelState.IsValid)
-            {
-                using (var db = new ConnectionContext())
-                {
-                    var updateUtility = db.Utilities.FirstOrDefault(u => u.UtilityId == id);
-                    if (utility.ImageFile != null)
-                    {
-                        var fileName = Path.GetFileNameWithoutExtension(utility.ImageFile.FileName);
-                        var extension = Path.GetExtension(utility.ImageFile.FileName);
-
-                        fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
-
-
-                        fileName = Path.Combine(Server.MapPath("~/Content/UploadImages/UtilityImages/"), fileName);
-                        utility.ImageFile.SaveAs(fileName);
-
-                        updateUtility.UtilityAccountNumber = utility.UtilityAccountNumber;
-                        updateUtility.UtilityCategoryId = utility.UtilityCategoryId;
-                        updateUtility.UtilityDescription = utility.UtilityDescription;
-                        updateUtility.UtilityImagePath = utility.UtilityImagePath;
-                        updateUtility.UtilityName = utility.UtilityName;
-
-                        using (var transaction = db.Database.BeginTransaction())
-                        {
-                            db.Utilities.AddOrUpdate(updateUtility);
-                            db.SaveChanges();
-                            transaction.Commit();
-                        }
-                        return RedirectToAction("Index");
-                    }
-
-                    updateUtility.UtilityAccountNumber = utility.UtilityAccountNumber;
-                    updateUtility.UtilityCategoryId = utility.UtilityCategoryId;
-                    updateUtility.UtilityDescription = utility.UtilityDescription;
-                    updateUtility.UtilityName = utility.UtilityName;
-
-                    using (var transaction = db.Database.BeginTransaction())
-                    {
-                        db.Utilities.AddOrUpdate(updateUtility);
-                        db.SaveChanges();
-                        transaction.Commit();
-                    }
+                    Utility.UtilityAccountNumber = utility.UtilityAccountNumber;
+                    Utility.UtilityCategoryId = utility.UtilityCategoryId;
+                    Utility.UtilityDescription = utility.UtilityDescription;
+                    Utility.UtilityName = utility.UtilityName;
+                    
+                    db.Utilities.AddOrUpdate(Utility);
+                    db.SaveChanges();
+                    transaction.Commit();
                     return RedirectToAction("Index");
                 }
             }
-
             return View(utility);
         }
     }
