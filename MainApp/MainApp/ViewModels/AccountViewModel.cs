@@ -31,4 +31,16 @@ namespace MainApp.ViewModels
         [Display(Name = "Дата открытия")]
         public DateTime OpenDate { get; set; }
     }
+
+    public class Refill
+    {
+        [Required(ErrorMessage = "Введите номер счета")]
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Номер счета только число")]
+        [Display(Name = "Номер счета")]
+        public int AccountNum { get; set; }
+
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Введите число")]
+        [Display(Name = "Сумма")]
+        public decimal RefillSum { get; set; }
+    }
 }

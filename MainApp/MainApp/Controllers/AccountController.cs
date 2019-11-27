@@ -90,27 +90,45 @@ namespace MainApp.Controllers
                 return RedirectToAction("Index", new { createAccount.userName});
             }
         }
-        [AllowAnonymous]
+
+        [HttpGet]
+        public ActionResult Refill()
+        {
+            return View();
+        }
+
+
         [HttpPost]
         public ActionResult Refill(int? accountNum, decimal refillSum)
         {
-            if (accountNum == null) return Json(new {StatusCode = 404, Message = "Счет не найден"});
-            if (refillSum <= 0) return Json(new {StatusCode = 405, Message = "Сумма не может быть меньше или равна нулю"});
+            ModelState.Clear();
+            if (refillSum <= 0) ModelState.AddModelError("", "Сумма не может быть меньше или равна нулю");
             using (var db = new ConnectionContext())
             {
-                var accountNumber = db.Accounts.Find(accountNum);
-                accountNumber.Balance = refillSum;
-                try
+                var accountNumber = db.Accounts.FirstOrDefault(x => x.AccountNumber == accountNum);
+
+                if (accountNumber == null)
                 {
-                    db.SaveChanges();
+                    ModelState.AddModelError("", "Счет не найден");
                 }
-                catch (Exception)
+
+                if (ModelState.IsValid)
                 {
-                    return Json(new {StausCode = 304, Message = "Не удалось пополнить счет"});
+                    accountNumber.Balance += refillSum;
+                    try
+                    {
+                        db.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+                        ModelState.AddModelError("", "Не удалось пополнить счет");
+                    }
+                    ViewBag.Message = "Счет успешно пополнен";
+                    
                 }
             }
-            return Json(new {StatusCode = 200, Message = "Счет успешно пополнен на сумму " + refillSum});
-        }
 
+            return View();
+        }
     }
 }

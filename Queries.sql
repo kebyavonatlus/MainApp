@@ -8,7 +8,9 @@ CREATE TABLE Users
 	IdentificationNumber NVARCHAR(14) NULL,
 	BirthDate DATE NULL,
 	Address NVARCHAR(300) NULL,
-	IsCustomer BIT 
+	IsCustomer BIT,
+	SendToEmail BIT NULL,
+	EmailAccepted BIT NULL
 )
 
 CREATE TABLE Roles 
@@ -33,7 +35,7 @@ CREATE TABLE Accounts
 	AccountOpenDate DATETIME NOT NULL,
 	AccountCloseDate DATETIME NULL,
 	Balance NUMERIC(15,2) NOT NULL,
-	Currency CHAR(5) NOT NULL,
+	Currency INT NOT NULL,
 	UserId INT FOREIGN KEY REFERENCES dbo.Users(UserId) NOT NULL
 )
 
@@ -58,7 +60,8 @@ CREATE TABLE dbo.Transfers
 	Comment NVARCHAR(300) NOT NULL,
 	TransferSum NUMERIC(15,2) NOT NULL,
 	TransferDate DATETIME NOT NULL,
-	Comission NUMERIC(15,2) NULL
+	Comission NUMERIC(15,2) NULL,
+	TransferStatus BIT NOT NULL
 )
 
 CREATE TABLE dbo.TransferHistories
@@ -86,7 +89,6 @@ CREATE TABLE dbo.Utilities
 	UtilityImagePath NVARCHAR(MAX) NULL
 )	
 
-
 CREATE TABLE dbo.Payments
 (
 	PaymentId INT PRIMARY KEY IDENTITY(1,1),
@@ -105,3 +107,4 @@ CREATE TABLE dbo.PaymentHistories
 	HistoryId INT FOREIGN KEY REFERENCES dbo.Histories(HistoryId) NOT NULL
 	PRIMARY KEY(PaymentId, HistoryId)
 )
+

@@ -1983,6 +1983,7 @@
     <Content Include="Views\Shared\Success.cshtml" />
     <Content Include="Views\UserAccount\UserProfile.cshtml" />
     <Content Include="Views\Histories\Index.cshtml" />
+    <Content Include="Views\Account\Refill.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

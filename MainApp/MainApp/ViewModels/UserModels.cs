@@ -71,9 +71,12 @@ namespace MainApp.ViewModels
     public class UserChangePassword
     {
         public string UserName { get; set; }
+        [Required(ErrorMessage = "Введите новый пароль")]
         [Display(Name = "Новый пароль")]
         [DataType(DataType.Password)]
+
         public string NewPassword { get; set; }
+        [Required(ErrorMessage = "Повторите новый пароль")]
         [Display(Name = "Повтор нового пароля")]
         [DataType(DataType.Password)]
         [Compare("NewPassword", ErrorMessage = "Пароли не совпадают")]

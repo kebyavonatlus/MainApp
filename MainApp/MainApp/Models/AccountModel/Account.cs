@@ -25,7 +25,7 @@ namespace MainApp.Models.AccountModel
         public decimal Balance { get; set; }
 
         [Display(Name = "Валюта")]
-        public CurrencyId Currency { get; set; }
+        public CurrencyId? Currency { get; set; }
 
         [Required]
         public int UserId { get; set; }
