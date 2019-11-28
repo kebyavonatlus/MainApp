@@ -165,6 +165,8 @@ namespace MainApp.Controllers
                 if (accountFrom == null) return Json(new { StatusCode = 404, Message = "Счет отправителя не найден" });
                 if (accountTo == null) return Json(new { StatusCode = 404, Message = "Счет получателя не найден" });
 
+                var AdminUser = db.Users.FirstOrDefault(user => user.Login == "admin");
+                var comissionAccount = db.Accounts.FirstOrDefault(x => x.UserId == AdminUser.UserId);
 
                 // Формирование истории
                 var history = new History
@@ -177,10 +179,22 @@ namespace MainApp.Controllers
                     UserId = accountFrom.UserId
                 };
 
+                var comission = new History
+                {
+                    CtAccount = accountFrom.AccountNumber,
+                    DtAccount = comissionAccount.AccountNumber,
+                    Comment = "Комиссия за перевод",
+                    Sum = Transfer.Comission,
+                    OperationDate = DateTime.Now,
+                    UserId = accountFrom.UserId
+                };
+
+
                 using (var transactions = db.Database.BeginTransaction())
                 {
                     // Добавление истории
                     db.Histories.Add(history);
+                    db.Histories.Add(comission);
                     try
                     {
                         db.SaveChanges();
@@ -196,7 +210,14 @@ namespace MainApp.Controllers
                         TransferId = Transfer.TransferId,
                         HistoryId = history.HistoryId
                     });
+                    db.TransferHistories.Add(new TransferHistory
+                    {
+                        TransferId = Transfer.TransferId,
+                        HistoryId = comission.HistoryId
+                    });
 
+
+                    comissionAccount.Balance += Transfer.Comission;
                     accountFrom.Balance -= Transfer.TransferSum;
                     accountTo.Balance += Transfer.TransferSum;
 
