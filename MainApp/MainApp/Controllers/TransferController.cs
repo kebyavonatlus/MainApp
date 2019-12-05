@@ -39,7 +39,7 @@ namespace MainApp.Controllers
                             Comment = tranfers.Comment,
                             TransferSum = tranfers.TransferSum,
                             TransferDate = tranfers.TransferDate,
-                            TransferStatus = tranfers.TransferStatus == TransferStatus.Created ? "Создан" : "Принят"
+                            TransferStatus = tranfers.TransferStatus == (int)TransferStatus.Created ? "Создан" : "Принят"
                         };
                     return View(userTransfers.ToList());
                 }
@@ -57,7 +57,7 @@ namespace MainApp.Controllers
                             Comment = tranfers.Comment,
                             TransferSum = tranfers.TransferSum,
                             TransferDate = tranfers.TransferDate,
-                            TransferStatus = tranfers.TransferStatus == TransferStatus.Created ? "Создан" : "Принят"
+                            TransferStatus = tranfers.TransferStatus == (int)TransferStatus.Created ? "Создан" : "Принят"
                         };
                     return View(userTransfers.ToList());
                 }
@@ -120,7 +120,7 @@ namespace MainApp.Controllers
                     TransferDate = DateTime.Now,
                     TransferSum = TransferSum + comission,
                     Comission = comission,
-                    TransferStatus = TransferStatus.Created
+                    TransferStatus = (int)TransferStatus.Created
                 };
                 
                 // Добавление перевода в таблицу
@@ -157,7 +157,7 @@ namespace MainApp.Controllers
                 if (User == null) return Json(new { StatusCode = 404, Message = "Пользователь не найден" });
 
                 if (Transfer.ReceiverUserId != User.UserId) return Json(new { StatusCode = 403, Message = "Невозможно принять перевод. Не соотвествует пользователь" });
-                if (Transfer.TransferStatus == TransferStatus.Confirmed) return Json(new { StatusCode = 203, Message = "Перевод уже принят." });
+                if (Transfer.TransferStatus == (int)TransferStatus.Confirmed) return Json(new { StatusCode = 203, Message = "Перевод уже принят." });
 
                 var accountFrom = db.Accounts.FirstOrDefault(a => a.AccountNumber == Transfer.AccountFrom);
                 var accountTo = db.Accounts.FirstOrDefault(a => a.AccountNumber == Transfer.AccountTo);
@@ -222,7 +222,7 @@ namespace MainApp.Controllers
                     accountTo.Balance += Transfer.TransferSum;
 
                     // Меняем статус перевода
-                    Transfer.TransferStatus = TransferStatus.Confirmed;
+                    Transfer.TransferStatus = (int)TransferStatus.Confirmed;
 
                     try
                     {
@@ -256,7 +256,7 @@ namespace MainApp.Controllers
                 if (TransferId == null) return Json(new { StatusCode = 404, Message = "Перевод не найден" });
                 if (User == null) return Json(new { StatusCode = 404, Message = "Пользователь не найден" });
 
-                if (TransferId.TransferStatus != TransferStatus.Created) return Json(new { StatusCode = 203, Message = "Невозможно отменить перевод. Перевод уже подтвержден." });
+                if (TransferId.TransferStatus != (int)TransferStatus.Created) return Json(new { StatusCode = 203, Message = "Невозможно отменить перевод. Перевод уже подтвержден." });
 
                 if (TransferId.SenderUserId != User.UserId) return Json(new { StatusCode = 203, Message = "Невозможно отменить перевод. Только отправитель может отменить перевод" });
 

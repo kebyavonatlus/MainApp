@@ -18,7 +18,7 @@ namespace MainApp.Controllers
     public class UserAccountController : Controller
     {
         /// <summary>
-        /// Авторищация пользователя на сайт
+        /// Авторизация пользователя на сайт
         /// </summary>
         /// <returns></returns>
         public ActionResult Login()

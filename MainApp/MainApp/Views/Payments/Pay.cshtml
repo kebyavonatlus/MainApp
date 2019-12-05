@@ -134,6 +134,8 @@
             if (data.StatusCode === 200) {
                 alert(data.Message);
                 window.open(location, '_self').close();
+            } else {
+                alert(data.Message);
             }
         };
     }

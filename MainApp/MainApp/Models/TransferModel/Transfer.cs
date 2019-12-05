@@ -43,6 +43,6 @@ namespace MainApp.Models.TransferModel
 
         [Required(ErrorMessage = "Обзательное поле для заполенения \"Статус\"")]
         [Display(Name = "Статус")]
-        public TransferStatus TransferStatus { get; set; }
+        public int? TransferStatus { get; set; }
     }
 }
